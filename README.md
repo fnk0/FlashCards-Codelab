@@ -291,10 +291,8 @@ The default fragment is where we gonna put the Default Functions that will be tr
 For now let's just override ```onInflate() ``` so we avoid errors when inflating an fragment that has already been inflated.
 ```java
 public class DefaultFragment extends Fragment {
-
     // The default Fragment is used so we avoid errors when trying to inflate a fragment that has already been inflated.
     // All our other Fragments will extend DefaultFragment
-
     @Override
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         FragmentManager fm = getFragmentManager();
@@ -304,4 +302,5 @@ public class DefaultFragment extends Fragment {
         super.onInflate(activity, attrs, savedInstanceState);
     }
 }
+
 ```
