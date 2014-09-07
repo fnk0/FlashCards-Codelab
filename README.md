@@ -10,4 +10,4 @@ This tutorial will be assume that you have installed
 3. Android Built Tools 19.1.0
 
 It will also asume that you have a working android device to debug or an emulator. 
-I personally recommend ![genymotion](http://www.genymotion.com/) emulator. 
+I personally recommend [genymotion](http://www.genymotion.com/) emulator. 
