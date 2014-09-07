@@ -8,10 +8,9 @@ This tutorial will be assume that you have installed
 1. Java SDK >= 1.7
 2. AndroiD Studio beta >= 0.8.2
 3. Android Built Tools 19.1.0
+4. It will also asume that you have a working android device to debug or an emulator. I personally recommend [genymotion](http://www.genymotion.com/) emulator.
 
-It will also asume that you have a working android device to debug or an emulator. 
-I personally recommend [genymotion](http://www.genymotion.com/) emulator. 
-
+Recommended Website to get dependencies: [Gradle Please](http://gradleplease.appspot.com/)
 
 ###### Creating a New Project
 Open Android Studio and select New Project
