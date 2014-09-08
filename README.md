@@ -76,7 +76,7 @@ dependencies {
 
 For this app We will be using the standard navigation drawer for the App Navigation and fragments to display the content of each section/card. 
 
-###### Step 1. Create a new layout called drawer_activity.xml.
+##### Step 1. Create a new layout called drawer_activity.xml.
 
 If you understand android XML you can copy and paste the following snippet otherwise I recommend that you type it paying attention to each line for a better understanding of what is going on. 
 
@@ -112,7 +112,7 @@ If you understand android XML you can copy and paste the following snippet other
 </android.support.v4.widget.DrawerLayout>
 ````
 
-###### Step 2. Create a generic Drawer Activity. 
+##### Step 2. Create a generic Drawer Activity. 
 As an Android Developer you might find youserlf in the situation of not being able to use fragments or you may want to use different activities with a Drawer Layout. It can also be tedious every time you start a project to code the Nav Drawer boylerplate.  
 For those reasons we will extend Activity to create a Default DrawerLayoutActivity for our App.
 
@@ -285,7 +285,7 @@ public abstract class DrawerLayoutActivity extends Activity {
 }
 ```
 
-###### Step 3. Create a Default Fragment
+##### Step 3. Create a Default Fragment
 
 The default fragment is where we gonna put the Default Functions that will be true for all fragments.
 For now let's just override ```onInflate() ``` so we avoid errors when inflating an fragment that has already been inflated.
@@ -304,6 +304,176 @@ public class DefaultFragment extends Fragment {
 }
 
 ```
-###### Step 4. Creating the Main Activity and the Navigation Drawer Adapter. 
+##### Step 4. Creating the Navigation Drawer Adapter. 
 
-Our navigation drawer will have the 
+Our navigation drawer will have the following format: Icon + Title
+![Nav drawer](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/nav_drawer_item.png)
+
+The top and Bottom padding are both 8dp. From the beginning to the end of the Thumbnail there is 72dp. The text is centered. We follow those guidelines to match the new UI Design guidelines established by google. For more metrics guidelines check the [google design website](http://www.google.com/design/spec/layout/metrics-and-keylines.html#metrics-and-keylines-keylines-and-spacing).
+
+Now let's translate that picture above to see how it will look like in code. 
+Nav Drawer Item XML: 
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dip"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingBottom="8dip"
+    android:paddingTop="8dip"
+    android:gravity="center_vertical"
+    android:background="@drawable/drawer_selector">
+
+    <ImageView
+        android:id="@+id/navDrawerIcon"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/navDrawerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/navDrawerIcon"
+        android:layout_toEndOf="@id/navDrawerIcon"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/listPreferredItemHeightLarge"
+        android:gravity="center_vertical"
+    />
+</RelativeLayout>
+```
+
+Now we need an Object that will represent the layout we just create. It will be a simple object with just the title of the item and the thumbnail Icon.
+
+```java
+public class NavDrawerItem  {
+
+    private String title;
+    private Drawable icon;
+
+    public NavDrawerItem(String title, Drawable icon) {
+        this.title = title;
+        this.icon = icon;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Drawable getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
+    }
+}
+```
+
+####### Creating the Adapter. 
+
+When I just started programming for Android creating Adapters was always one of the scariest things for me. They are an odd structure if you are used to other platformms. We gona create a very simple Base Adapter that will use the Layout and the object we just created to populate a ```ListView```.
+
+NavDrawerAdapter:
+```java
+public class NavDrawerAdapter extends BaseAdapter {
+
+    private Context context;
+    private ArrayList<NavDrawerItem> navDrawerItems;
+
+    /**
+     * Default Constructor
+     */
+    public NavDrawerAdapter() {
+    }
+
+    /**
+     *
+     * @param context
+     *      The Context on which this NavDrawer is being created
+     * @param navDrawerItems
+     *      The ArrayList containing the DrawersItems for the Adapter.
+     */
+    public NavDrawerAdapter(Context context, ArrayList<NavDrawerItem> navDrawerItems) {
+        this.context = context;
+        this.navDrawerItems = navDrawerItems;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ArrayList<NavDrawerItem> getNavDrawerItems() {
+        return navDrawerItems;
+    }
+
+    public void setNavDrawerItems(ArrayList<NavDrawerItem> navDrawerItems) {
+        this.navDrawerItems = navDrawerItems;
+    }
+
+    /**
+     * Internally used by the framework.
+     * @return
+     *      The number of elements on this adapter
+     */
+    @Override
+    public int getCount() {
+        return navDrawerItems.size();
+    }
+
+    /**
+     * The getItem is also necessary. Will be used by the onItemClickListener on the ListView for this adapter
+     *
+     * @param position
+     *      The clicked position
+     * @return
+     *      The object for the position
+     */
+    @Override
+    public Object getItem(int position) {
+        return navDrawerItems.get(position);
+    }
+
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * The GetView is responsible for inflating and creating the View for each one of the items on the ListView
+     * To get different behavior on the Items on a List you can do them so on the getView
+     * By Example, for a list with alternate colors we could do.
+     * if(position % 2 == 0) {
+     *     convertView.setBackgroundColor(Color.BLUE);
+     * } else {
+     *      convertView.setBackgroundColor(Color.RED);
+     * }
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if(convertView == null) {
+            LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            convertView = mInflater.inflate(R.layout.drawer_list_item, null);
+        }
+        ImageView imageIcon = (ImageView) convertView.findViewById(R.id.navDrawerIcon);
+        TextView title = (TextView) convertView.findViewById(R.id.navDrawerTitle);
+        title.setText(navDrawerItems.get(position).getTitle());
+        imageIcon.setImageDrawable(navDrawerItems.get(position).getIcon());
+        return convertView;
+    }
+}
+```
