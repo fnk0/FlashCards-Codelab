@@ -15,7 +15,7 @@
          You need to have in your layout a `CardView` with the ID `list_cardId` -->
         <it.gmariotti.cardslib.library.view.CardListView
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:id="@+id/flashCardsList"
+            android:id="@+id/categoriesList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -26,12 +26,13 @@
     </RelativeLayout>
 
     <gabilheri.com.flashcards.fab.FloatingActionButton
-        android:id="@+id/addNewFlashCard"
+        android:id="@+id/addNewCategory"
         android:layout_gravity="bottom|end"
-        android:text="J"
+        android:text="j"
         android:shadowRadius="40"
         android:shadowDx="5"
         android:shadowDy="7"
+        android:textColor="@color/action_bar_text_color"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_width="72dip"

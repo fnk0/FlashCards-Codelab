@@ -58,7 +58,7 @@ public class FloatingActionButton extends Button {
         Typeface mFont = Typeface.createFromAsset(context.getApplicationContext().getAssets(), "icons.ttf");
         mTextPaint.setTypeface(mFont);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTextPaint.setTextSize(100);
+        mTextPaint.setTextSize(getResources().getDimension(R.dimen.fab_button));
 
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.FloatingActionButton);
         mColor = a.getColor(R.styleable.FloatingActionButton_color, Color.WHITE);
@@ -99,16 +99,17 @@ public class FloatingActionButton extends Button {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        float xPos = getWidth() / 2;
-        float yPos = getHeight() /2;
-        canvas.drawCircle(xPos, yPos, (float) (getWidth() / 2.6), mButtonPaint);
-        Rect textRect = new Rect();
-        mTextPaint.getTextBounds(this.getText().toString(), 0, this.getText().toString().length(), textRect);
-        int offSet = textRect.height() / 2;
-        canvas.drawText(this.getText().toString(), xPos, yPos + offSet, mTextPaint);
         if (null != mBitmap) {
             canvas.drawBitmap(mBitmap, (getWidth() - mBitmap.getWidth()) / 2,
                     (getHeight() - mBitmap.getHeight()) / 2, mDrawablePaint);
+        } else {
+            float xPos = getWidth() / 2;
+            float yPos = getHeight() / 2;
+            canvas.drawCircle(xPos, yPos, (float) (getWidth() / 2.6), mButtonPaint);
+            Rect textRect = new Rect();
+            mTextPaint.getTextBounds(this.getText().toString(), 0, this.getText().toString().length(), textRect);
+            int offSet = textRect.height() / 2;
+            canvas.drawText(this.getText().toString(), xPos, yPos + offSet + 10f, mTextPaint);
         }
     }
 
@@ -139,6 +140,11 @@ public class FloatingActionButton extends Button {
             animator.setInterpolator(mInterpolator);
             animator.start();
         }
+    }
+
+    @Override
+    public void setTextColor(int color) {
+        mTextPaint.setColor(color);
     }
 
     public static int darkenColor(int color) {

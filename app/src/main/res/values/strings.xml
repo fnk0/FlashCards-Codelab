@@ -18,7 +18,6 @@
         <item>@drawable/ic_categories</item>
         <item>@drawable/ic_settings</item>
     </array>
-
     <!-- End nav drawer stuff -->
 
 </resources>

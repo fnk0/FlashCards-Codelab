@@ -70,6 +70,10 @@ public abstract class DrawerLayoutActivity extends Activity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if(savedInstanceState == null) {
+            displayView(0, null);
+        }
     }
 
     @Override
@@ -140,7 +144,7 @@ public abstract class DrawerLayoutActivity extends Activity {
      * Override this method to change the log tag string;
      * @return
      */
-    private String getLogTag() {
+    public String getLogTag() {
         return "DrawerActivity";
     }
 

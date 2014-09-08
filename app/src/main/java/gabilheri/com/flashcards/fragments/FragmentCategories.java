@@ -1,6 +1,5 @@
 package gabilheri.com.flashcards.fragments;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,10 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gabilheri.com.flashcards.R;
+import gabilheri.com.flashcards.fab.FloatingActionButton;
 import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 
 /**
@@ -25,8 +27,9 @@ import it.gmariotti.cardslib.library.view.CardListView;
 public class FragmentCategories extends DefaultFragment {
 
     private List<Card> mCardsList;
-    private CardListView categoriesList;
-
+    private CardListView mCategoriesList;
+    private CardArrayAdapter mCardAdapter;
+    private FloatingActionButton buttonFab;
 
     /**
      * @param savedInstanceState
@@ -59,7 +62,7 @@ public class FragmentCategories extends DefaultFragment {
         // The first argument is the XML layout to be inflated
         // The second argument is the root to which this layout is being attached.
         // The third argument we specify if we want the fragment to be attached to it's root.
-        return inflater.inflate(R.layout.fragment_list_fab, container, false);
+        return inflater.inflate(R.layout.fragment_categories, container, false);
     }
 
     /**
@@ -72,8 +75,23 @@ public class FragmentCategories extends DefaultFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        buttonFab = (FloatingActionButton) view.findViewById(R.id.addNewCategory);
+        buttonFab.setColor(getResources().getColor(R.color.action_bar_color));
+        buttonFab.setTextColor(getResources().getColor(R.color.action_bar_text_color));
+
+        mCategoriesList = (CardListView) view.findViewById(R.id.categoriesList);
+        mCardsList = new ArrayList<Card>();
+
+        for(int i = 0; i < 10; i++) {
+            Card card = new Card(getActivity());
+            card.setTitle("Category " + i);
+            mCardsList.add(card);
+        }
+
+        mCardAdapter = new CardArrayAdapter(getActivity(), mCardsList);
+        mCardAdapter.setEnableUndo(true);
+        mCategoriesList.setAdapter(mCardAdapter);
     }
 
     /**
@@ -106,5 +124,4 @@ public class FragmentCategories extends DefaultFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
