@@ -147,11 +147,11 @@ public abstract class DrawerLayoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        
+
         // Enabling action bar app and Icon , and behaving it as a toggle button.
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-        
+
         /**
          * Drawer Layout stuff
          */
@@ -159,7 +159,9 @@ public abstract class DrawerLayoutActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList.setOnItemClickListener(new DrawerListener());
+
         init();
+
         mDrawerList.setAdapter(getAdapter());
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -180,6 +182,10 @@ public abstract class DrawerLayoutActivity extends Activity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if(savedInstanceState == null) {
+            displayView(0, null);
+        }
     }
 
     @Override
@@ -250,7 +256,7 @@ public abstract class DrawerLayoutActivity extends Activity {
      * Override this method to change the log tag string;
      * @return
      */
-    private String getLogTag() {
+    public String getLogTag() {
         return "DrawerActivity";
     }
 
@@ -624,4 +630,198 @@ Now if you choose the same colors/Icon as me your app should look something like
 
 ![First App Screenshot](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/AppScreenshots/first_screenshot.png)
 
+##### 8. Creating the Categories Fragment.
+For this part of the tutorial I've provided a Floating Action Button class for us to use. [Download the Fab Class](https://github.com/fnk0/FlashCards/blob/master/app/src/main/java/gabilheri/com/flashcards/fab/FloatingActionButton.java) from this projecr repository. Feel free to take a look at the code. IF you are a Java developer familiar with the Canvas object you will find this very useful as you will see that you can create custom elements using the canvas object. 
 
+For this part of the tutorial we will be using the Android Developer Font Icons from SpiderFly Studios: [Download Link](http://www.spiderflyapps.com/downloads/android-developer-icons-the-font/) This handy font file allows us to use Icons as text. By example the letter ```R``` is the Delete icon.
+
+We also be using the Cards Lib library. CardsLib is a handy library to create UI using Card Elements. Many google apps use card elements for it's layouts. Ex: Google Now, Google+, Google Play Music, etc..
+CardsLib documentation can be found here: [Cards Lib Docs](https://github.com/gabrielemariotti/cardslib)
+
+###### Creating the fragment for the categories:
+
+The Outer FrameLayout is necessary for the Undo layout used by the CardsLib and is also used by the Floating Button.
+As you can see we referenced the FloatingActionButton from XML as a normal XML element. 
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/themesFrag" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- You can customize this layout.
+         You need to have in your layout a `CardView` with the ID `list_cardId` -->
+        <it.gmariotti.cardslib.library.view.CardListView
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:id="@+id/categoriesList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fadingEdge="none"
+            card:list_card_layout_resourceID="@layout/list_card_thumbnail_layout"
+            style="@style/list_card.thumbnail"/>
+
+    </RelativeLayout>
+
+    <gabilheri.com.flashcards.fab.FloatingActionButton
+        android:id="@+id/addNewCategory"
+        android:layout_gravity="bottom|end"
+        android:text="j"
+        android:shadowRadius="40"
+        android:shadowDx="5"
+        android:shadowDy="7"
+        android:textColor="@color/action_bar_text_color"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_width="72dip"
+        android:layout_height="72dip" />
+
+    <!-- Include undo message layout -->
+    <include layout="@layout/list_card_undo_message"/>
+</FrameLayout>
+```
+###### The Java part of our Fragment...
+This fragment will be specially long as there is detailed Javadocs for each one of the overriden methods. 
+```java
+public class FragmentCategories extends DefaultFragment {
+
+    /**
+     * Declare the Instance variables that will be used by this fragment
+     */
+    private List<Card> mCardsList;
+    private CardListView mCategoriesList;
+    private CardArrayAdapter mCardAdapter;
+    private FloatingActionButton buttonFab;
+
+    /**
+     * @param savedInstanceState
+     *         If the fragment is being re-created from
+     *         a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * @param inflater
+     *      The LayoutInflater object that can be used to inflate
+     *      any views in the fragment,
+     * @param container
+     *      If non-null, this is the parent view that the fragment's
+     *      UI should be attached to.  The fragment should not add the view itself,
+     *      but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState
+     *      If non-null, this fragment is being re-constructed
+     *      from a previous saved state as given here.
+     * @return
+     *      Return the View for the fragment's UI, or null.
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.setHasOptionsMenu(true); // We use this so we can have specific ActionBar actions/icons for this fragment
+        // We return the inflated view to be used by onViewCreated.
+        // The first argument is the XML layout to be inflated
+        // The second argument is the root to which this layout is being attached.
+        // The third argument we specify if we want the fragment to be attached to it's root.
+        return inflater.inflate(R.layout.fragment_categories, container, false);
+    }
+
+    /**
+     *
+     * @param view
+     *         The View returned by {@link #onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}.
+     * @param savedInstanceState
+     *         If non-null, this fragment is being re-constructed
+     */
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Initialize the FloatingActionButton and set it's colors
+        buttonFab = (FloatingActionButton) view.findViewById(R.id.addNewCategory);
+        buttonFab.setColor(getResources().getColor(R.color.action_bar_color));
+        buttonFab.setTextColor(getResources().getColor(R.color.action_bar_text_color));
+
+        // We initialize the CardsList and add some Dummy Data for now.
+        // We will come back to this point to add our Custom Card matching our App UI as well with real data from a Database.
+        mCategoriesList = (CardListView) view.findViewById(R.id.categoriesList);
+        mCardsList = new ArrayList<Card>();
+        for(int i = 0; i < 10; i++) {
+            Card card = new Card(getActivity());
+            card.setTitle("Category " + i);
+            mCardsList.add(card);
+        }
+        mCardAdapter = new CardArrayAdapter(getActivity(), mCardsList);
+        mCardAdapter.setEnableUndo(true);
+        mCategoriesList.setAdapter(mCardAdapter);
+    }
+
+    /**
+     * @param menu
+     *         The options menu in which you place your items.
+     * @param inflater
+     *         The inflater for this menu
+     * @see #setHasOptionsMenu
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     *
+     * @param item
+     *         The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     *
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+}
+```
+
+###### Adding some Animation for the fragment.
+We are going to provide some animations for the Fragments. We will be using some really simple fade in and fade out animations to switch in between fragments. 
+* Create a folder for the animation resourses inside res called ```animator```
+* Create 2 animations inside animator, ```alpha_in.xml``` and ```alpha_out.xml```
+
+Code for alpha_in:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+        android:interpolator="@android:interpolator/accelerate_quad"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:propertyName="alpha"
+        android:duration="@android:integer/config_longAnimTime" />
+</set>
+```
+
+Code for alpha_out:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+        android:interpolator="@android:interpolator/accelerate_quad"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:propertyName="alpha"
+        android:duration="@android:integer/config_longAnimTime" />
+</set>
+```
