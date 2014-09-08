@@ -112,6 +112,19 @@ If you understand android XML you can copy and paste the following snippet other
 </android.support.v4.widget.DrawerLayout>
 ````
 
+We also need to provide some Colors Resources for our App. Inside the folder values create a file called Colors. The file will have <resources> as it's root element. Add the following colors: (Feel free to use any color scheme you may want)
+```xml
+<!-- Inside colors.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="action_bar_color">#0277bd</color>
+    <color name="action_bar_text_color">#fafafa</color>
+    <color name="drawer_background">#fafafa</color>
+    <color name="drawer_selected">#ff9100</color>
+</resources>
+```
+
+
 ##### Step 2. Create a generic Drawer Activity. 
 As an Android Developer you might find youserlf in the situation of not being able to use fragments or you may want to use different activities with a Drawer Layout. It can also be tedious every time you start a project to code the Nav Drawer boylerplate.  
 For those reasons we will extend Activity to create a Default DrawerLayoutActivity for our App.
@@ -575,7 +588,7 @@ Now inside the init() function let's add the code to initialize the adapter:
             mNavDrawerAdapter = new NavDrawerAdapter(this, navDrawerItems);
 ```
 
-Not finally we add return the created adapter inside getAdapter();
+Not finally we return the created adapter inside getAdapter();
 ```java
     @Override
     protected BaseAdapter getAdapter() {
@@ -583,6 +596,28 @@ Not finally we add return the created adapter inside getAdapter();
     }
 ```
 
+##### 7. Adding Some Style to the app:
+
+To match the Android L guidelines we will increase the size of the action bar to 56dp.
+First open the file dimens.xml and add the following dimension resource.
+```xml
+<dimen name="action_bar_size">56dip</dimen>
+```
+Now we open styles.xml and add the following styles:
+```xml
+    <style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar">
+        <item name="android:height">@dimen/action_bar_size</item>
+        <item name="android:background">@color/action_bar_color</item>
+        <item name="android:titleTextStyle">@style/ActionBarStyleTitle</item>
+    </style>
+    <style name="ActionBarStyleTitle" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/action_bar_text_color</item>
+    </style>
+```
+Now inside the AppTheme style we add the register our ActionBarStyle to our AppTheme Style:
+```xml
+    <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+```
 
 
 
