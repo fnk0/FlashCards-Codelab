@@ -304,3 +304,6 @@ public class DefaultFragment extends Fragment {
 }
 
 ```
+###### Step 4. Creating the Main Activity and the Navigation Drawer Adapter. 
+
+Our navigation drawer will have the 
