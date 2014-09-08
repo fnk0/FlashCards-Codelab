@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <color name="action_bar_color">#0277bd</color>
+    <color name="action_bar_text_color">#fafafa</color>
     <color name="drawer_background">#fafafa</color>
     <color name="drawer_selected">#ff9100</color>
-
 </resources>
