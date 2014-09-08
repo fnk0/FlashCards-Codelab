@@ -461,6 +461,7 @@ public class NavDrawerAdapter extends BaseAdapter {
      * } else {
      *      convertView.setBackgroundColor(Color.RED);
      * }
+     * Other Layouts can also be inflated based on the position.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
