@@ -864,7 +864,7 @@ if(activeFragment != null) {
                     R.animator.alpha_in, R.animator.alpha_out) // Animations for the fragment out...
             .replace(R.id.frame_container, activeFragment) // We then replace whatever is inside FrameLayout to our activeFragment
             .commit(); // Commit the change
-    // update selected item and title, then close the drawer
+    // update selected item and title
     getDrawerList().setItemChecked(position, true); // We now set the item on the drawer that has been cliced as active
     getDrawerList().setSelection(position); // Same concept as above...
     setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
@@ -872,5 +872,12 @@ if(activeFragment != null) {
     Log.i(getLogTag(), "Error creating fragment"); // if the fragment does not create we Log an error.
 }
 ```
+
+###### Checking out our work... 
+Now our categories should look something like this.... I known is not very exciting yet.. but it is a start :)
+The next part of the tutorial will be thinking more on our overall structure of the app and the DataStructures that we will be using. 
+Some things that we wish to have to start with are: Categories, Decks, FlashCards.
+
+.... See if this fits in one section... 
 
 
