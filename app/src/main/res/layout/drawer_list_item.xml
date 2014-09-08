@@ -2,20 +2,20 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="58dip"
-    android:background="@drawable/drawer_selector"
-    >
+    android:layout_height="72dip"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingBottom="8dip"
+    android:paddingTop="8dip"
+    android:gravity="center_vertical"
+    android:background="@drawable/drawer_selector">
 
     <ImageView
         android:id="@+id/navDrawerIcon"
-        android:layout_width="36dip"
-        android:layout_height="wrap_content"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="8dip"
-        android:layout_marginTop="8dip"
         android:layout_centerVertical="true" />
 
     <TextView
@@ -25,11 +25,7 @@
         android:layout_toRightOf="@id/navDrawerIcon"
         android:layout_toEndOf="@id/navDrawerIcon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textAppearance="?android:attr/listPreferredItemHeightLarge"
         android:gravity="center_vertical"
-        android:layout_marginBottom="8dip"
-        android:layout_marginTop="8dip"
-        android:paddingRight="40dip"
-        />
-
+    />
 </RelativeLayout>

@@ -25,9 +25,19 @@ public class NavDrawerAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<NavDrawerItem> navDrawerItems;
 
+    /**
+     * Default Constructor
+     */
     public NavDrawerAdapter() {
     }
 
+    /**
+     *
+     * @param context
+     *      The Context on which this NavDrawer is being created
+     * @param navDrawerItems
+     *      The ArrayList containing the DrawersItems for the Adapter.
+     */
     public NavDrawerAdapter(Context context, ArrayList<NavDrawerItem> navDrawerItems) {
         this.context = context;
         this.navDrawerItems = navDrawerItems;
@@ -49,21 +59,47 @@ public class NavDrawerAdapter extends BaseAdapter {
         this.navDrawerItems = navDrawerItems;
     }
 
+    /**
+     * Internally used by the framework.
+     * @return
+     *      The number of elements on this adapter
+     */
     @Override
     public int getCount() {
         return navDrawerItems.size();
     }
 
+    /**
+     * The getItem is also necessary. Will be used by the onItemClickListener on the ListView for this adapter
+     *
+     * @param position
+     *      The clicked position
+     * @return
+     *      The object for the position
+     */
     @Override
     public Object getItem(int position) {
         return navDrawerItems.get(position);
     }
+
 
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * The GetView is responsible for inflating and creating the View for each one of the items on the ListView
+     * To get different behavior on the Items on a List you can do them so on the getView
+     * By Example, for a list with alternate colors we could do.
+     * if(position % 2 == 0) {
+     *     convertView.setBackgroundColor(Color.BLUE);
+     * } else {
+     *      convertView.setBackgroundColor(Color.RED);
+     * }
+     *
+     * Other Layouts can also be inflated based on the position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
