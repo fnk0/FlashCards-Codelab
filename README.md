@@ -874,7 +874,11 @@ if(activeFragment != null) {
 ```
 
 ###### Checking out our work... 
-Now our categories should look something like this.... I known is not very exciting yet.. but it is a start :)
+Now our categories should look something like this....
+
+![Category with placeholder cards](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/AppScreenshots/category_placeholder_pic.png)
+
+I known is not very exciting yet.. but it is a start :)
 The next part of the tutorial will be thinking more on our overall structure of the app and the DataStructures that we will be using. 
 Some things that we wish to have to start with are: Categories, Decks, FlashCards.
 
