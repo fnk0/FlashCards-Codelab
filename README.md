@@ -572,28 +572,28 @@ Add the following instance variables.
 
 Now inside the init() function let's add the code to initialize the adapter:
 ```java
-    // inside init();
-    // Retrieve the typedArray from the XML. Notice the weird Syntax "obtain"
-            TypedArray navIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-            navMenuTitles = getResources().getStringArray(R.array.nav_drawer_titles); // Retrieve the titles
-            navDrawerItems = new ArrayList<NavDrawerItem>(); // Initialize the ArrayList
-    
-            // Now let's add add items to the ArrayList of NavDrawer items.
-            for(int i = 0; i < navMenuTitles.length; i++) {
-                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navIcons.getDrawable(i)));
-            }
-            // An typed array can be recycled to avoid waste of System Resources. In our case it wouldn't matter because we only have 2 items.. but is still a good practice.
-            navIcons.recycle();
-    
-            mNavDrawerAdapter = new NavDrawerAdapter(this, navDrawerItems);
+// inside init();
+// Retrieve the typedArray from the XML. Notice the weird Syntax "obtain"
+TypedArray navIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
+navMenuTitles = getResources().getStringArray(R.array.nav_drawer_titles); // Retrieve the titles
+navDrawerItems = new ArrayList<NavDrawerItem>(); // Initialize the ArrayList
+
+// Now let's add add items to the ArrayList of NavDrawer items.
+for(int i = 0; i < navMenuTitles.length; i++) {
+    navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navIcons.getDrawable(i)));
+}
+// An typed array can be recycled to avoid waste of System Resources. In our case it wouldn't matter because we only have 2 items.. but is still a good practice.
+navIcons.recycle();
+
+mNavDrawerAdapter = new NavDrawerAdapter(this, navDrawerItems);
 ```
 
 Not finally we return the created adapter inside getAdapter();
 ```java
-    @Override
-    protected BaseAdapter getAdapter() {
-        return mNavDrawerAdapter;
-    }
+@Override
+protected BaseAdapter getAdapter() {
+    return mNavDrawerAdapter;
+}
 ```
 
 ##### 7. Adding Some Style to the app:
@@ -605,18 +605,18 @@ First open the file dimens.xml and add the following dimension resource.
 ```
 Now we open styles.xml and add the following styles:
 ```xml
-    <style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar">
-        <item name="android:height">@dimen/action_bar_size</item>
-        <item name="android:background">@color/action_bar_color</item>
-        <item name="android:titleTextStyle">@style/ActionBarStyleTitle</item>
-    </style>
-    <style name="ActionBarStyleTitle" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/action_bar_text_color</item>
-    </style>
+<style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar">
+    <item name="android:height">@dimen/action_bar_size</item>
+    <item name="android:background">@color/action_bar_color</item>
+    <item name="android:titleTextStyle">@style/ActionBarStyleTitle</item>
+</style>
+<style name="ActionBarStyleTitle" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+    <item name="android:textColor">@color/action_bar_text_color</item>
+</style>
 ```
 Now inside the AppTheme style we add the register our ActionBarStyle to our AppTheme Style:
 ```xml
-    <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+<item name="android:actionBarStyle">@style/ActionBarStyle</item>
 ```
 
 
