@@ -799,6 +799,7 @@ public class FragmentCategories extends DefaultFragment {
 We are going to provide some animations for the Fragments. We will be using some really simple fade in and fade out animations to switch in between fragments. 
 * Create a folder for the animation resourses inside res called ```animator```
 * Create 2 animations inside animator, ```alpha_in.xml``` and ```alpha_out.xml```
+* For more Information about ObjectAnimator [see the documentation](http://developer.android.com/guide/topics/graphics/prop-animation.html)
 
 Code for alpha_in:
 ```xml
@@ -825,3 +826,51 @@ Code for alpha_out:
         android:duration="@android:integer/config_longAnimTime" />
 </set>
 ```
+
+###### Navigating in between fragments.
+We will be using fragments for this app. Fragments allow us great flexibility. Fragments is also a preferred way of dealing with interface than Activities. 
+Our fragments will be put on the position of the FrameLayout that is inside our Acitvity. 
+
+To do this let's change some code in our activity. We will now put some code inside ```displayView()``` to change which fragment is being loaded.
+
+First add the following instance variable and constants to our activity:
+```java
+// We use this to know which of the items has been selected.
+// We name the items so we know which one is which.
+public static final int CATEGORIES_FRAG = 0;
+public static final int SETTINGS_FRAG = 1;
+private DefaultFragment activeFragment = null;
+```
+
+The constants are a good way of representing which position has been clicked. The position is basically the position of the MenuItem inside the navDrawerTitles array.
+We also declare a DefaultFragment as null. This will allow us to reference the active fragment on the activity easily.
+
+Now let's add some code to our displayView():
+```java
+// Inside Display View...
+switch (position) {
+    case CATEGORIES_FRAG:
+        activeFragment = new FragmentCategories(); // Set the ActiveFragment to our selected item on the list
+        break;
+    case SETTINGS_FRAG:
+        break;
+    default:
+        break;
+}
+if(activeFragment != null) {
+    FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
+    fragmentManager.beginTransaction() // Start the transaction of fragment change
+            .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out, // Animations for the fragment in...
+                    R.animator.alpha_in, R.animator.alpha_out) // Animations for the fragment out...
+            .replace(R.id.frame_container, activeFragment) // We then replace whatever is inside FrameLayout to our activeFragment
+            .commit(); // Commit the change
+    // update selected item and title, then close the drawer
+    getDrawerList().setItemChecked(position, true); // We now set the item on the drawer that has been cliced as active
+    getDrawerList().setSelection(position); // Same concept as above...
+    setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
+} else {
+    Log.i(getLogTag(), "Error creating fragment"); // if the fragment does not create we Log an error.
+}
+```
+
+
