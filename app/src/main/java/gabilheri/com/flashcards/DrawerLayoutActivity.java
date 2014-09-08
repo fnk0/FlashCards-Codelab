@@ -31,7 +31,6 @@ public abstract class DrawerLayoutActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle, mTitle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,19 +62,15 @@ public abstract class DrawerLayoutActivity extends Activity {
                 invalidateOptionsMenu();
             }
         };
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         init();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if(mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,7 +98,6 @@ public abstract class DrawerLayoutActivity extends Activity {
      * Drawer listener.
      */
     private class DrawerListener implements ListView.OnItemClickListener {
-
         @Override
         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
             /**
@@ -146,8 +140,9 @@ public abstract class DrawerLayoutActivity extends Activity {
 
     /**
      * Override this method in case of need for a different list colors, etc..
-     * Shpuld use same Id's to avoid confusion
+     * Should use same Id's to avoid confusion
      * @return
+     *      The Activity layout for this drawer activity
      */
     private int getLayout() {
        return R.layout.drawer_activity;
@@ -156,6 +151,7 @@ public abstract class DrawerLayoutActivity extends Activity {
     /**
      * Getter for the drawer toggle
      * @return
+     *      The drawer toggle for this activity
      */
     public ActionBarDrawerToggle getDrawerToggle() {
         return mDrawerToggle;
@@ -163,15 +159,8 @@ public abstract class DrawerLayoutActivity extends Activity {
 
     /**
      *
-     * @param mDrawerToggle
-     */
-    public void setDrawerToggle(ActionBarDrawerToggle mDrawerToggle) {
-        this.mDrawerToggle = mDrawerToggle;
-    }
-
-    /**
-     *
      * @return
+     *      The List used by the drawer
      */
     public ListView getDrawerList() {
         return mDrawerList;
@@ -180,6 +169,7 @@ public abstract class DrawerLayoutActivity extends Activity {
     /**
      *
      * @return
+     *      The Drawer Layout used by this activity
      */
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
@@ -193,6 +183,4 @@ public abstract class DrawerLayoutActivity extends Activity {
      * @return
      */
     protected abstract BaseAdapter getAdapter();
-
-
 }

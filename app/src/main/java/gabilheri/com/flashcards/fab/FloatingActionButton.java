@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.AbsListView;
 import android.widget.Button;
 
 import gabilheri.com.flashcards.R;
@@ -139,12 +138,6 @@ public class FloatingActionButton extends Button {
             ObjectAnimator animator = ObjectAnimator.ofFloat(this, "Y", offset);
             animator.setInterpolator(mInterpolator);
             animator.start();
-        }
-    }
-
-    public void listenTo(AbsListView listView) {
-        if (null != listView) {
-            listView.setOnScrollListener(new DirectionScrollListener(this));
         }
     }
 

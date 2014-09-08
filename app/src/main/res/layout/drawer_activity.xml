@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         />
 
-    <!-- Listview to display slider menu -->
+    <!-- Listview to display drawer list menu menu -->
     <ListView
         android:id="@+id/list_slidermenu"
         android:layout_width="240dp"
