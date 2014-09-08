@@ -526,7 +526,6 @@ Strings can be found inside values > strings.xml
 Open strings.xml and add the following:
 ```xml
     <!-- Navigation Drawer Stuff! -->
-
     <!-- Nav drawer titles. Can be accessed programaticaly using a String[] -->
     <string-array name="nav_drawer_titles">
         <item>Categories</item>
@@ -537,7 +536,6 @@ Open strings.xml and add the following:
         <item>@drawable/ic_categories</item>
         <item>@drawable/ic_settings</item>
     </array>
-
     <!-- End nav drawer stuff -->
 ```
 
@@ -558,7 +556,6 @@ public class MainActivity extends DrawerLayoutActivity {
     public void displayView(int position, Bundle fragmentBundle) {
 
     }
-
 
     @Override
     protected BaseAdapter getAdapter() {
@@ -635,6 +632,7 @@ For this part of the tutorial I've provided a Floating Action Button class for u
 
 For this part of the tutorial we will be using the Android Developer Font Icons from SpiderFly Studios: [Download Link](http://www.spiderflyapps.com/downloads/android-developer-icons-the-font/) This handy font file allows us to use Icons as text. By example the letter ```R``` is the Delete icon.
 Once you have download the ttf file (text type format) put it inside the ```assets``` folder. If the folder does not exist create it inside the package ```main```. Your folder structure with the font will look like this:
+
 ![assets folder with icons.ttf](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-08%2010.06.10.png)
 
 We also be using the Cards Lib library. CardsLib is a handy library to create UI using Card Elements. Many google apps use card elements for it's layouts. Ex: Google Now, Google+, Google Play Music, etc..
