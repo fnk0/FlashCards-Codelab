@@ -478,3 +478,22 @@ public class NavDrawerAdapter extends BaseAdapter {
     }
 }
 ```
+
+###### 5. Adding Resources.
+
+Every great app has resources. Text, icons, etc.. Android devices vary in size so adding icons and assets for your app can be a little tricky. Luckely Android Studio has a nice way of adding image assets. Android studio will them generate the correct size for mdpi, hdpi, xhdpi, and xxhdpi screens. 
+
+To add an asset ```right click``` on the assets folder and select New > Image Asset
+![new image asset](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.06.34.png)
+
+You should now see something like this. We will be creating an asset from an image. Click on the little 3 dots after the image patch.
+![select image](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.06.50.png)
+
+Select an Image. The asset's I'm using can be found on the folder Assets @ this repository. Now you should be seeing something like this. Change the name so we don't override the default app Icon. Keep the App Icon to be called ic_launcher so it is easier to change at anypoint.
+``hint: A good practice is start your icons with ic_ as the Android framework does not allow subfolders to organize assets```
+![name the image](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.07.26.png)
+
+Click on Finish and the icons will be created. Repeat this process to add more icons or change the App Icon
+![finish icon](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.07.34.png)
+
+
