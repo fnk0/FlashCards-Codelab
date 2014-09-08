@@ -26,6 +26,9 @@ import it.gmariotti.cardslib.library.view.CardListView;
  */
 public class FragmentCategories extends DefaultFragment {
 
+    /**
+     * Declare the Instance variables that will be used by this fragment
+     */
     private List<Card> mCardsList;
     private CardListView mCategoriesList;
     private CardArrayAdapter mCardAdapter;
@@ -76,19 +79,20 @@ public class FragmentCategories extends DefaultFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Initialize the FloatingActionButton and set it's colors
         buttonFab = (FloatingActionButton) view.findViewById(R.id.addNewCategory);
         buttonFab.setColor(getResources().getColor(R.color.action_bar_color));
         buttonFab.setTextColor(getResources().getColor(R.color.action_bar_text_color));
 
+        // We initialize the CardsList and add some Dummy Data for now.
+        // We will come back to this point to add our Custom Card matching our App UI as well with real data from a Database.
         mCategoriesList = (CardListView) view.findViewById(R.id.categoriesList);
         mCardsList = new ArrayList<Card>();
-
         for(int i = 0; i < 10; i++) {
             Card card = new Card(getActivity());
             card.setTitle("Category " + i);
             mCardsList.add(card);
         }
-
         mCardAdapter = new CardArrayAdapter(getActivity(), mCardsList);
         mCardAdapter.setEnableUndo(true);
         mCategoriesList.setAdapter(mCardAdapter);

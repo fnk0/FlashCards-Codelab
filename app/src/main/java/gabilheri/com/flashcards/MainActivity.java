@@ -20,11 +20,12 @@ public class MainActivity extends DrawerLayoutActivity {
     // We name the items so we know which one is which.
     public static final int CATEGORIES_FRAG = 0;
     public static final int SETTINGS_FRAG = 1;
+    private DefaultFragment activeFragment = null;
 
     private NavDrawerAdapter mNavDrawerAdapter;
     private ArrayList<NavDrawerItem> navDrawerItems;
     private String[] navMenuTitles;
-    private DefaultFragment activeFragment = null;
+
 
     @Override
     public void init() {
@@ -48,26 +49,26 @@ public class MainActivity extends DrawerLayoutActivity {
 
         switch (position) {
             case CATEGORIES_FRAG:
-                activeFragment = new FragmentCategories();
+                activeFragment = new FragmentCategories(); // Set the ActiveFragment to our selected item on the list
                 break;
             case SETTINGS_FRAG:
                 break;
             default:
                 break;
         }
-
         if(activeFragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out)
-                    .replace(R.id.frame_container, activeFragment)
-                    .commit();
-            // update selected item and title, then close the drawer
-            getDrawerList().setItemChecked(position, true);
-            getDrawerList().setSelection(position);
-            setTitle(navMenuTitles[position]);
+            FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
+            fragmentManager.beginTransaction() // Start the transaction of fragment change
+                    .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out, // Animations for the fragment in...
+                            R.animator.alpha_in, R.animator.alpha_out) // Animations for the fragment out...
+                    .replace(R.id.frame_container, activeFragment) // We then replace whatever is inside FrameLayout to our activeFragment
+                    .commit(); // Commit the change
+            // update selected item and title
+            getDrawerList().setItemChecked(position, true); // We now set the item on the drawer that has been cliced as active
+            getDrawerList().setSelection(position); // Same concept as above...
+            setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
         } else {
-            Log.i(getLogTag(), "Error creating fragment");
+            Log.i(getLogTag(), "Error creating fragment"); // if the fragment does not create we Log an error.
         }
 
     }
