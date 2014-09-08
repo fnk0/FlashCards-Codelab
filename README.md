@@ -619,6 +619,9 @@ Now inside the AppTheme style we add the register our ActionBarStyle to our AppT
 <item name="android:actionBarStyle">@style/ActionBarStyle</item>
 ```
 
+###### Checking out the current state of the app. 
+Now if you choose the same colors/Icon as me your app should look something like this. Otherwise it may be slightly different.
 
+![First App Screenshot](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/AppScreenshots/first_screenshot.png)
 
 
