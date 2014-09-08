@@ -112,6 +112,19 @@ If you understand android XML you can copy and paste the following snippet other
 </android.support.v4.widget.DrawerLayout>
 ````
 
+We also need to provide some Colors Resources for our App. Inside the folder values create a file called Colors. The file will have <resources> as it's root element. Add the following colors: (Feel free to use any color scheme you may want)
+```xml
+<!-- Inside colors.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="action_bar_color">#0277bd</color>
+    <color name="action_bar_text_color">#fafafa</color>
+    <color name="drawer_background">#fafafa</color>
+    <color name="drawer_selected">#ff9100</color>
+</resources>
+```
+
+
 ##### Step 2. Create a generic Drawer Activity. 
 As an Android Developer you might find youserlf in the situation of not being able to use fragments or you may want to use different activities with a Drawer Layout. It can also be tedious every time you start a project to code the Nav Drawer boylerplate.  
 For those reasons we will extend Activity to create a Default DrawerLayoutActivity for our App.
@@ -134,7 +147,11 @@ public abstract class DrawerLayoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-
+        
+        // Enabling action bar app and Icon , and behaving it as a toggle button.
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+        
         /**
          * Drawer Layout stuff
          */
@@ -142,6 +159,7 @@ public abstract class DrawerLayoutActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList.setOnItemClickListener(new DrawerListener());
+        init();
         mDrawerList.setAdapter(getAdapter());
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -162,7 +180,6 @@ public abstract class DrawerLayoutActivity extends Activity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        init();
     }
 
     @Override
@@ -478,3 +495,130 @@ public class NavDrawerAdapter extends BaseAdapter {
     }
 }
 ```
+
+###### 5. Adding Resources.
+
+Every great app has resources. Text, icons, etc.. Android devices vary in size so adding icons and assets for your app can be a little tricky. Luckely Android Studio has a nice way of adding image assets. Android studio will them generate the correct size for mdpi, hdpi, xhdpi, and xxhdpi screens. 
+
+To add an asset ```right click``` on the assets folder and select New > Image Asset
+![new image asset](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.06.34.png)
+
+You should now see something like this. We will be creating an asset from an image. Click on the little 3 dots after the image patch.
+![select image](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.06.50.png)
+
+Select an Image. The asset's I'm using can be found on the folder Assets @ this repository. Now you should be seeing something like this. Change the name so we don't override the default app Icon. Keep the App Icon to be called ic_launcher so it is easier to change at anypoint.
+```hint: A good practice is start your icons with ic_ as the Android framework does not allow subfolders to organize assets```
+![name the image](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.07.26.png)
+
+Click on Finish and the icons will be created. Repeat this process to add more icons or change the App Icon
+![finish icon](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-07%2023.07.34.png)
+
+###### Strings.xml
+The android framework provides a very nice way of organizing Strings and arrays that will be used across the application.
+The strings.xml file also helps localizing an app for different languages easily.
+Strings can be found inside values > strings.xml
+Open strings.xml and add the following:
+```xml
+    <!-- Navigation Drawer Stuff! -->
+
+    <!-- Nav drawer titles. Can be accessed programaticaly using a String[] -->
+    <string-array name="nav_drawer_titles">
+        <item>Categories</item>
+        <item>Settings</item>
+    </string-array>
+    <!-- Nav drawer icons. Can be accessed pragmatically using a TypedArray[] -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_categories</item>
+        <item>@drawable/ic_settings</item>
+    </array>
+
+    <!-- End nav drawer stuff -->
+```
+
+##### 6. Creating the Activity. 
+
+We can now delete the code that is inside MainActivity as we already added that inside DrawerLayoutActivity.
+We will them extend DrawerLayoutActivity and implement the required methods. Now our MainActivity should look like this:
+
+```java
+public class MainActivity extends DrawerLayoutActivity {
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void displayView(int position, Bundle fragmentBundle) {
+
+    }
+
+
+    @Override
+    protected BaseAdapter getAdapter() {
+        return null;
+    }
+}
+```
+
+###### Let's start by initializing our adapter.
+
+Add the following instance variables. 
+```java
+    private NavDrawerAdapter mNavDrawerAdapter;
+    private ArrayList<NavDrawerItem> navDrawerItems;
+    private String[] navMenuTitles;
+```
+
+Now inside the init() function let's add the code to initialize the adapter:
+```java
+// inside init();
+// Retrieve the typedArray from the XML. Notice the weird Syntax "obtain"
+TypedArray navIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
+navMenuTitles = getResources().getStringArray(R.array.nav_drawer_titles); // Retrieve the titles
+navDrawerItems = new ArrayList<NavDrawerItem>(); // Initialize the ArrayList
+
+// Now let's add add items to the ArrayList of NavDrawer items.
+for(int i = 0; i < navMenuTitles.length; i++) {
+    navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navIcons.getDrawable(i)));
+}
+// An typed array can be recycled to avoid waste of System Resources. In our case it wouldn't matter because we only have 2 items.. but is still a good practice.
+navIcons.recycle();
+
+mNavDrawerAdapter = new NavDrawerAdapter(this, navDrawerItems);
+```
+
+Not finally we return the created adapter inside getAdapter();
+```java
+@Override
+protected BaseAdapter getAdapter() {
+    return mNavDrawerAdapter;
+}
+```
+
+##### 7. Adding Some Style to the app:
+
+To match the Android L guidelines we will increase the size of the action bar to 56dp.
+First open the file dimens.xml and add the following dimension resource.
+```xml
+<dimen name="action_bar_size">56dip</dimen>
+```
+Now we open styles.xml and add the following styles:
+```xml
+<style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar">
+    <item name="android:height">@dimen/action_bar_size</item>
+    <item name="android:background">@color/action_bar_color</item>
+    <item name="android:titleTextStyle">@style/ActionBarStyleTitle</item>
+</style>
+<style name="ActionBarStyleTitle" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+    <item name="android:textColor">@color/action_bar_text_color</item>
+</style>
+```
+Now inside the AppTheme style we add the register our ActionBarStyle to our AppTheme Style:
+```xml
+<item name="android:actionBarStyle">@style/ActionBarStyle</item>
+```
+
+
+
+
