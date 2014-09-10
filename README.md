@@ -526,7 +526,6 @@ Strings can be found inside values > strings.xml
 Open strings.xml and add the following:
 ```xml
     <!-- Navigation Drawer Stuff! -->
-
     <!-- Nav drawer titles. Can be accessed programaticaly using a String[] -->
     <string-array name="nav_drawer_titles">
         <item>Categories</item>
@@ -537,7 +536,6 @@ Open strings.xml and add the following:
         <item>@drawable/ic_categories</item>
         <item>@drawable/ic_settings</item>
     </array>
-
     <!-- End nav drawer stuff -->
 ```
 
@@ -558,7 +556,6 @@ public class MainActivity extends DrawerLayoutActivity {
     public void displayView(int position, Bundle fragmentBundle) {
 
     }
-
 
     @Override
     protected BaseAdapter getAdapter() {
@@ -634,6 +631,9 @@ Now if you choose the same colors/Icon as me your app should look something like
 For this part of the tutorial I've provided a Floating Action Button class for us to use. [Download the Fab Class](https://github.com/fnk0/FlashCards/blob/master/app/src/main/java/gabilheri/com/flashcards/fab/FloatingActionButton.java) from this projecr repository. Feel free to take a look at the code. IF you are a Java developer familiar with the Canvas object you will find this very useful as you will see that you can create custom elements using the canvas object. 
 
 For this part of the tutorial we will be using the Android Developer Font Icons from SpiderFly Studios: [Download Link](http://www.spiderflyapps.com/downloads/android-developer-icons-the-font/) This handy font file allows us to use Icons as text. By example the letter ```R``` is the Delete icon.
+Once you have download the ttf file (text type format) put it inside the ```assets``` folder. If the folder does not exist create it inside the package ```main```. Your folder structure with the font will look like this:
+
+![assets folder with icons.ttf](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-09-08%2010.06.10.png)
 
 We also be using the Cards Lib library. CardsLib is a handy library to create UI using Card Elements. Many google apps use card elements for it's layouts. Ex: Google Now, Google+, Google Play Music, etc..
 CardsLib documentation can be found here: [Cards Lib Docs](https://github.com/gabrielemariotti/cardslib)
@@ -874,7 +874,11 @@ if(activeFragment != null) {
 ```
 
 ###### Checking out our work... 
-Now our categories should look something like this.... I known is not very exciting yet.. but it is a start :)
+Now our categories should look something like this....
+
+![Category with placeholder cards](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/AppScreenshots/category_placeholder_pic.png)
+
+I known is not very exciting yet.. but it is a start :)
 The next part of the tutorial will be thinking more on our overall structure of the app and the DataStructures that we will be using. 
 Some things that we wish to have to start with are: Categories, Decks, FlashCards.
 
