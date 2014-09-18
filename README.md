@@ -743,6 +743,23 @@ Now if you choose the same colors/Icon as me your app should look something like
 ##### 8. Creating the Categories Fragment.
 For this part of the tutorial I've provided a Floating Action Button class for us to use. [Download the Fab Class](https://github.com/fnk0/FlashCards/blob/master/app/src/main/java/gabilheri/com/flashcards/fab/FloatingActionButton.java) from this projecr repository. Feel free to take a look at the code. IF you are a Java developer familiar with the Canvas object you will find this very useful as you will see that you can create custom elements using the canvas object. 
 
+Once the Fab is Download inside the folder ```main/res/values``` create a new XML file and name it ```attrs``` and add the following code. 
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FloatingActionButton">
+        <attr name="drawable" format="integer"/>
+        <attr name="color" format="color"/>
+        <attr name="shadowRadius" format="float"/>
+        <attr name="shadowDx" format="float"/>
+        <attr name="shadowDy" format="float"/>
+        <attr name="shadowColor" format="integer"/>
+    </declare-styleable>
+
+</resources>
+```
+
 For this part of the tutorial we will be using the Android Developer Font Icons from SpiderFly Studios: [Download Link](http://www.spiderflyapps.com/downloads/android-developer-icons-the-font/) This handy font file allows us to use Icons as text. By example the letter ```R``` is the Delete icon.
 Once you have download the ttf file (text type format) put it inside the ```assets``` folder. If the folder does not exist create it inside the package ```main```. Your folder structure with the font will look like this:
 
