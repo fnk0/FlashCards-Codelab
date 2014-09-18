@@ -112,6 +112,35 @@ If you understand android XML you can copy and paste the following snippet other
 </android.support.v4.widget.DrawerLayout>
 ````
 
+Now we need to create the ```drawer_selector```. A selector is an drawable element, can have different shapes, square, circle, etc.. and can have different states, pressed, selected, etc.. 
+What we will be doing is determining 2 different states for pressed and non pressed so we get a feedback when the user selects something in the Drawer.
+
+Inside ```main/res/``` create a new folder called ```drawable``` and make a new element called ```drawer_background```.
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="@color/drawer_selected" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/drawer_selected" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <solid android:color="@color/drawer_background" />
+        </shape>
+    </item>
+</selector>
+```
+
+
 We also need to provide some Colors Resources for our App. Inside the folder values create a file called Colors. The file will have <resources> as it's root element. Add the following colors: (Feel free to use any color scheme you may want)
 ```xml
 <!-- Inside colors.xml -->
