@@ -906,6 +906,4 @@ I known is not very exciting yet.. but it is a start :)
 The next part of the tutorial will be thinking more on our overall structure of the app and the DataStructures that we will be using. 
 Some things that we wish to have to start with are: Categories, Decks, FlashCards.
 
-.... See if this fits in one section... 
-
 
