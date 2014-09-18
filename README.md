@@ -311,11 +311,19 @@ public abstract class DrawerLayoutActivity extends Activity {
 ##### Step 3. Create a Default Fragment
 
 The default fragment is where we gonna put the Default Functions that will be true for all fragments.
-For now let's just override ```onInflate() ``` so we avoid errors when inflating an fragment that has already been inflated.
+For now let's just override ```onInflate() ``` so we avoid errors when inflating an fragment that has already been inflated. We will also override some of the default methods and add some abstract methods so we don't forget to add them later on when creating fragments.
+NOTE: Do not copy all the Comments/Javadoc. The javadoc is there just for reading purposes.
+If you wan't the javadoc also the easiest way is to generate those methods through Android Studio using the generate menu. (ctrl + N on windows) and (cmd + N on Macs)
 ```java
-public class DefaultFragment extends Fragment {
-    // The default Fragment is used so we avoid errors when trying to inflate a fragment that has already been inflated.
-    // All our other Fragments will extend DefaultFragment
+/**
+* The Default Fragment will be used to set up common behavior features common to all fragments.
+ * The default fragment will also enforce us to implement common methods necessary to all fragments.
+ * The default Fragment is also used so we avoid errors when trying to inflate a fragment that has already been inflated.
+ * All our other Fragments will extend DefaultFragment
+ */
+public abstract class DefaultFragment extends Fragment {
+
+
     @Override
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         FragmentManager fm = getFragmentManager();
@@ -323,6 +331,82 @@ public class DefaultFragment extends Fragment {
             fm.beginTransaction().remove(this).commit();
         }
         super.onInflate(activity, attrs, savedInstanceState);
+    }
+
+
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * This is optional, and non-graphical fragments can return null (which
+     * is the default implementation).  This will be called between
+     * {@link #onCreate(android.os.Bundle)} and {@link #onActivityCreated(android.os.Bundle)}.
+     * <p/>
+     * <p>If you return a View from here, you will later be called in
+     * {@link #onDestroyView} when the view is being released.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
+    @Override
+    public abstract View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+
+    /**
+     * Called immediately after {@link #onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}
+     * has returned, but before any saved state has been restored in to the view.
+     * This gives subclasses a chance to initialize themselves once
+     * they know their view hierarchy has been completely created.  The fragment's
+     * view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view               The View returned by {@link #onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     */
+    @Override
+    public abstract void onViewCreated(View view, Bundle savedInstanceState);
+
+    /**
+     * @param savedInstanceState
+     *         If the fragment is being re-created from
+     *         a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * @param menu
+     *         The options menu in which you place your items.
+     * @param inflater
+     *         The inflater for this menu
+     * @see #setHasOptionsMenu
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     *
+     * @param item
+     *         The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     *
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 
@@ -698,30 +782,7 @@ public class FragmentCategories extends DefaultFragment {
     private CardArrayAdapter mCardAdapter;
     private FloatingActionButton buttonFab;
 
-    /**
-     * @param savedInstanceState
-     *         If the fragment is being re-created from
-     *         a previous saved state, this is the state.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
-    /**
-     * @param inflater
-     *      The LayoutInflater object that can be used to inflate
-     *      any views in the fragment,
-     * @param container
-     *      If non-null, this is the parent view that the fragment's
-     *      UI should be attached to.  The fragment should not add the view itself,
-     *      but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState
-     *      If non-null, this fragment is being re-constructed
-     *      from a previous saved state as given here.
-     * @return
-     *      Return the View for the fragment's UI, or null.
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setHasOptionsMenu(true); // We use this so we can have specific ActionBar actions/icons for this fragment
@@ -732,13 +793,6 @@ public class FragmentCategories extends DefaultFragment {
         return inflater.inflate(R.layout.fragment_categories, container, false);
     }
 
-    /**
-     *
-     * @param view
-     *         The View returned by {@link #onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}.
-     * @param savedInstanceState
-     *         If non-null, this fragment is being re-constructed
-     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -752,7 +806,7 @@ public class FragmentCategories extends DefaultFragment {
         // We will come back to this point to add our Custom Card matching our App UI as well with real data from a Database.
         mCategoriesList = (CardListView) view.findViewById(R.id.categoriesList);
         mCardsList = new ArrayList<Card>();
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             Card card = new Card(getActivity());
             card.setTitle("Category " + i);
             mCardsList.add(card);
@@ -761,38 +815,8 @@ public class FragmentCategories extends DefaultFragment {
         mCardAdapter.setEnableUndo(true);
         mCategoriesList.setAdapter(mCardAdapter);
     }
-
-    /**
-     * @param menu
-     *         The options menu in which you place your items.
-     * @param inflater
-     *         The inflater for this menu
-     * @see #setHasOptionsMenu
-     * @see #onPrepareOptionsMenu
-     * @see #onOptionsItemSelected
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    /**
-     *
-     * @param item
-     *         The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to
-     * proceed, true to consume it here.
-     *
-     * @see #onCreateOptionsMenu
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }
+
 ```
 
 ###### Adding some Animation for the fragment.
