@@ -10,10 +10,9 @@ import android.view.ViewGroup;
  *
  * @author Marcus Gabilheri
  * @version 1.0
- * @since 9/17/14.
+ * @since 9/18/14.
  */
-public class NewFlashcardFragment extends DefaultFragment {
-
+public class FragmentNewCategory extends DefaultFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

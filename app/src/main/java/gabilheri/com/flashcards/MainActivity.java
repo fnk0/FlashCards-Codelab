@@ -18,6 +18,10 @@ public class MainActivity extends DrawerLayoutActivity {
 
     // We use this to know which of the items has been selected.
     // We name the items so we know which one is which.
+    // For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
+    public static final int NEW_FLASHCARD_FRAG = -3;
+    public static final int NEW_DECK_FRAG = -2;
+    public static final int NEW_CATEGORY_FRAG = -1;
     public static final int CATEGORIES_FRAG = 0;
     public static final int SETTINGS_FRAG = 1;
     private DefaultFragment activeFragment = null;

@@ -9,18 +9,17 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 9/17/14.
  */
-public class Deck {
+public class Deck extends CardItem {
 
     private Category category;
-    private String deckName;
     private ArrayList<FlashCard> flashCards;
 
     public Deck() {
     }
 
     public Deck(Category category, String deckName, ArrayList<FlashCard> flashCards) {
+        super(deckName);
         this.category = category;
-        this.deckName = deckName;
         this.flashCards = flashCards;
     }
 
@@ -30,14 +29,6 @@ public class Deck {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public String getDeckName() {
-        return deckName;
-    }
-
-    public void setDeckName(String deckName) {
-        this.deckName = deckName;
     }
 
     public ArrayList<FlashCard> getFlashCards() {

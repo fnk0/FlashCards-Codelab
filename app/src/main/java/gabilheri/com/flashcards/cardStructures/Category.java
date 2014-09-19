@@ -9,26 +9,16 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 9/17/14.
  */
-public class Category {
+public class Category extends CardItem {
 
-    private String categoryName;
     private ArrayList<Deck> decks;
 
     public Category() {
     }
 
     public Category(String categoryName, ArrayList<Deck> decks) {
-        this.categoryName = categoryName;
+        super(categoryName);
         this.decks = decks;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 
     public ArrayList<Deck> getDecks() {
