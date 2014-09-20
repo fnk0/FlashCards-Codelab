@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gabilheri.com.flashcards.cardStructures.Category;
 import gabilheri.com.flashcards.cardStructures.Deck;
 import gabilheri.com.flashcards.cardStructures.FlashCard;
@@ -246,6 +249,148 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
         return deck;
     }
 
+    /**
+     * Method to get a Deck based on it's title
+     *
+     * @param id
+     *        The id for the Deck
+     * @return
+     *        A Deck Object
+     */
+    public Deck getDeckByID(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + _ID + " = " + id + ";";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            Log.i(LOG_TAG, "Cursor is null!!");
+            return null;
+        }
+
+        Deck deck = new Deck();
+        deck.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+        deck.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+
+        Category category = getCategoryByID(cursor.getLong(cursor.getColumnIndex(BELONGS_TO)));
+
+        if(category != null) deck.setCategory(category);
+
+        this.closeDB();
+        cursor.close();
+        return deck;
+    }
+
+    /**
+     *
+     * @param id
+     *      The id for the FlashCard
+     * @return
+     *      A FlashCard object
+     */
+    public FlashCard getFlashCardByID(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + FLASHCARDS_TABLE + " WHERE " + _ID + " = " + id + ";";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            Log.i(LOG_TAG, "Cursor is null!!");
+            return null;
+        }
+
+        FlashCard flashCard = new FlashCard();
+        flashCard.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+        flashCard.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+        flashCard.setContent(cursor.getString(cursor.getColumnIndex(FLASHCARD_CONTENT)));
+        flashCard.setContent(cursor.getString(cursor.getColumnIndex(FLASHCARD_ANSWER)));
+
+        Deck deck = getDeckByID(cursor.getLong(cursor.getColumnIndex(BELONGS_TO)));
+
+        if(deck != null) flashCard.setDeck(deck);
+
+        this.closeDB();
+        cursor.close();
+        return flashCard;
+    }
+
+    /**
+     *
+     * @param deck
+     *      The desired deck to which we want all the FlashCards
+     * @return
+     *      A list with all the FlashCards
+     */
+    public List<FlashCard> getAllFlashCardsForDeck(Deck deck) {
+
+        List<FlashCard> flashCards = new ArrayList<FlashCard>();
+        String selectQuery = "SELECT * FROM " + FLASHCARDS_TABLE + " WHERE " + _ID + " = " + deck.getId() + ";";
+
+        SQLiteDatabase db  = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                FlashCard flashCard = new FlashCard();
+                flashCard.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+                flashCard.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+                flashCard.setContent(cursor.getString(cursor.getColumnIndex(FLASHCARD_CONTENT)));
+                flashCard.setAnswer(cursor.getString(cursor.getColumnIndex(FLASHCARD_ANSWER)));
+                flashCard.setDeck(deck);
+                flashCards.add(flashCard);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        this.closeDB();
+        return flashCards;
+    }
+
+    /**
+     *
+     * @return
+     *      A list with all the categories
+     */
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<Category>();
+        String selectQuery = "SELECT * FROM " + CATEGORIES_TABLE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToNext()) {
+            do {
+                Category category = new Category();
+                category.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+                category.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+                categories.add(category);
+            } while (cursor.moveToNext());
+        }
+
+        return categories;
+    }
+
+    public List<Deck> getAllDecksForCategory(Category category) {
+        List<Deck> decks = new ArrayList<Deck>();
+        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + _ID + " = " + category.getId() + ";";
+
+        SQLiteDatabase db  = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                Deck deck = new Deck();
+                deck.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+                deck.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+                deck.setCategory(category);
+                decks.add(deck);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        this.closeDB();
+        return decks;
+    }
 
     /**
      * Closes the Database Connection.
