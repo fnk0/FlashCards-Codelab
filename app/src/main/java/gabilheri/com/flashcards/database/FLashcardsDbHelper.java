@@ -1,8 +1,13 @@
 package gabilheri.com.flashcards.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import gabilheri.com.flashcards.cardStructures.Category;
+import gabilheri.com.flashcards.cardStructures.Deck;
+import gabilheri.com.flashcards.cardStructures.FlashCard;
 
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
@@ -24,19 +29,17 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
      */
     public static final String _ID = "id"; // we need to use _ID because ID is already used by the system.
     public static final String TITLE = "title";
+    public static final String BELONGS_TO = "belongs_to";
 
     /**
      * CATEGORIES DATABASE CONSTANTS
      */
     public static final String CATEGORIES_TABLE = "categories";
-    public static final String CATEGORY_DECKS = "decks";
-
 
     /**
      * DECKS DATABASE CONSTANTS
      */
     public static final String DECKS_TABLE = "decks";
-    public static final String DECKS_CATEGORY = "category";
 
     /**
      * FLASHCARDS DATABASE TABLE
@@ -44,7 +47,6 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
     public static final String FLASHCARDS_TABLE = "flashcards";
     public static final String FLASHCARD_CONTENT = "content";
     public static final String FLASHCARD_ANSWER = "answer";
-    public static final String FLASHCARD_BELONGS_TO = "belongs_to";
 
 
     public FLashcardsDbHelper(Context context) {
@@ -56,23 +58,21 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORIES_TABLE + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                TITLE + " TEXT NOT NULL, " +
-                "FOREIGN KEY (" + CATEGORY_DECKS + ") REFERENCES " + DECKS_TABLE + " (" + _ID + ")" +
-                ";";
-
+                TITLE + " TEXT NOT NULL " +
+                ");";
         final String SQL_CREATE_DECKS_TABLE = "CREATE TABLE " + DECKS_TABLE + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 TITLE + " TEXT NOT NULL, " +
-                "FOREIGN KEY (" + DECKS_CATEGORY + ") REFERENCES + " + CATEGORIES_TABLE + " (" + _ID + ")" +
-                ";";
+                "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES + " + CATEGORIES_TABLE + " (" + _ID + ")" +
+                ");";
 
         final String SQL_CREATE_FLASHCARDS_TABLE = "CREATE TABLE " + FLASHCARDS_TABLE +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TITLE + " TEXT NOT NULL, " +
                 FLASHCARD_CONTENT + " TEXT NOT NULL, " +
                 FLASHCARD_ANSWER + " TEXT NOT NULL, " +
-                "FOREIGN KEY (" + FLASHCARD_BELONGS_TO + ") REFERENCES " + DECKS_TABLE + " (" + _ID + ")" +
-                ";";
+                "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES " + DECKS_TABLE + " (" + _ID + ")" +
+                ");";
 
         // We now create our tables.
         // If the tables already exist Android will them ignore this statement.
@@ -95,4 +95,60 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + FLASHCARDS_TABLE);
         onCreate(db);
     }
+
+    /**
+     * This method is used to insert a new Category entry in the database
+     *
+     * @param category
+     *      The category to be inserted
+     * @return
+     *      The inserted statement for the Database - Used internally by Android
+     */
+    public long createCategory(Category category) {
+        SQLiteDatabase db = this.getWritableDatabase(); // We get an WritableDatabase so we can insert data
+        ContentValues values = new ContentValues(); // Create a new content values with Key Value Pairs
+        values.put(TITLE, category.getTitle()); // Insert the TITLE for the Category
+
+        return db.insert(CATEGORIES_TABLE, null, values);
+    }
+
+    /**
+     * This method is used to insert a new Deck entry in the database
+     *
+     * @param deck
+     *      The deck to be inserted
+     * @param category
+     *      The category to which this Deck belongs to
+     * @return
+     *      The inserted statement for the Database - Used internally by Android
+     */
+    public long createDeck(Deck deck, Category category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TITLE, deck.getTitle());
+        values.put(BELONGS_TO, category.getId()); // We get the ID of the categories so we can reference through a foreign key
+        return db.insert(DECKS_TABLE, null, values);
+    }
+
+    /**
+     * This method is used to insert a new Flashcard entry in the database
+     *
+     * @param flashCard
+     *      The flashcard to be inserted
+     * @param deck
+     *      The Deck to which this flashcard belongs to
+     * @return
+     *      The inserted statement for the Database - Used internally by Android
+     */
+    public long creareFlashCard(FlashCard flashCard, Deck deck) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TITLE, flashCard.getTitle());
+        values.put(FLASHCARD_CONTENT, flashCard.getContent());
+        values.put(FLASHCARD_ANSWER, flashCard.getAnswer());
+        values.put(BELONGS_TO, deck.getId());
+
+        return db.insert(FLASHCARDS_TABLE, null, values);
+    }
+
 }
