@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.Map;
 import java.util.Set;
 
-import gabilheri.com.flashcards.database.FLashcardsDbHelper;
+import gabilheri.com.flashcards.database.MyDbHelper;
 
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
@@ -41,8 +41,8 @@ public class TestDB extends AndroidTestCase {
 
 
     public void testCreateDb() throws Throwable {
-        mContext.deleteDatabase(FLashcardsDbHelper.DATABASE_NAME);
-        SQLiteDatabase db = new FLashcardsDbHelper(this.mContext).getWritableDatabase();
+        mContext.deleteDatabase(MyDbHelper.DATABASE_NAME);
+        SQLiteDatabase db = new MyDbHelper(this.mContext).getWritableDatabase();
         assertEquals(true, db.isOpen());
         db.close();
     }
@@ -50,14 +50,14 @@ public class TestDB extends AndroidTestCase {
 
     public void testInsertReadCategory() {
 
-        FLashcardsDbHelper dbHelper = new FLashcardsDbHelper(mContext);
+        MyDbHelper dbHelper = new MyDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues testCategoryValues = new ContentValues();
-        testCategoryValues.put(FLashcardsDbHelper.TITLE, CATEGORY_TITLE);
+        testCategoryValues.put(MyDbHelper.TITLE, CATEGORY_TITLE);
 
         long locationRowId;
-        locationRowId = db.insert(FLashcardsDbHelper.CATEGORIES_TABLE, null, testCategoryValues);
+        locationRowId = db.insert(MyDbHelper.CATEGORIES_TABLE, null, testCategoryValues);
 
         // Verify we got a row back.
         assertTrue(locationRowId != -1);
@@ -68,7 +68,7 @@ public class TestDB extends AndroidTestCase {
 
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                FLashcardsDbHelper.CATEGORIES_TABLE,  // Table to Query
+                MyDbHelper.CATEGORIES_TABLE,  // Table to Query
                 null, // all columns
                 null, // Columns for the "where" clause
                 null, // Values for the "where" clause
@@ -84,15 +84,15 @@ public class TestDB extends AndroidTestCase {
 
     public void testInsertReadDeck() {
 
-        FLashcardsDbHelper dbHelper = new FLashcardsDbHelper(mContext);
+        MyDbHelper dbHelper = new MyDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues testDeckValues = new ContentValues();
-        testDeckValues.put(FLashcardsDbHelper.TITLE, DECK_TITLE);
-        testDeckValues.put(FLashcardsDbHelper.BELONGS_TO, 1);
+        testDeckValues.put(MyDbHelper.TITLE, DECK_TITLE);
+        testDeckValues.put(MyDbHelper.BELONGS_TO, 1);
 
         long locationRowId;
-        locationRowId = db.insert(FLashcardsDbHelper.DECKS_TABLE, null, testDeckValues);
+        locationRowId = db.insert(MyDbHelper.DECKS_TABLE, null, testDeckValues);
 
         // Verify we got a row back.
         assertTrue(locationRowId != -1);
@@ -103,7 +103,7 @@ public class TestDB extends AndroidTestCase {
 
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                FLashcardsDbHelper.DECKS_TABLE,  // Table to Query
+                MyDbHelper.DECKS_TABLE,  // Table to Query
                 null, // all columns
                 null, // Columns for the "where" clause
                 null, // Values for the "where" clause
@@ -119,17 +119,17 @@ public class TestDB extends AndroidTestCase {
     }
 
     public void testInserReadFlashCards() {
-        FLashcardsDbHelper dbHelper = new FLashcardsDbHelper(mContext);
+        MyDbHelper dbHelper = new MyDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues testFlashcard1Values = new ContentValues();
-        testFlashcard1Values.put(FLashcardsDbHelper.TITLE, FLASHCARD_1_TITLE);
-        testFlashcard1Values.put(FLashcardsDbHelper.FLASHCARD_CONTENT, FLASHCARD_1_CONTENT);
-        testFlashcard1Values.put(FLashcardsDbHelper.FLASHCARD_ANSWER, FLASHCARD_1_ANSWER);
-        testFlashcard1Values.put(FLashcardsDbHelper.BELONGS_TO, 1);
+        testFlashcard1Values.put(MyDbHelper.TITLE, FLASHCARD_1_TITLE);
+        testFlashcard1Values.put(MyDbHelper.FLASHCARD_CONTENT, FLASHCARD_1_CONTENT);
+        testFlashcard1Values.put(MyDbHelper.FLASHCARD_ANSWER, FLASHCARD_1_ANSWER);
+        testFlashcard1Values.put(MyDbHelper.BELONGS_TO, 1);
 
         long locationRowId;
-        locationRowId = db.insert(FLashcardsDbHelper.FLASHCARDS_TABLE, null, testFlashcard1Values);
+        locationRowId = db.insert(MyDbHelper.FLASHCARDS_TABLE, null, testFlashcard1Values);
 
         // Verify we got a row back.
         assertTrue(locationRowId != -1);
@@ -140,7 +140,7 @@ public class TestDB extends AndroidTestCase {
 
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                FLashcardsDbHelper.FLASHCARDS_TABLE,  // Table to Query
+                MyDbHelper.FLASHCARDS_TABLE,  // Table to Query
                 null, // all columns
                 "id=?", // Columns for the "where" clause
                 new String[] {"1"}, // Values for the "where" clause
@@ -152,12 +152,12 @@ public class TestDB extends AndroidTestCase {
         validateCursor(testFlashcard1Values, cursor);
 
         ContentValues testFlashcard2Values = new ContentValues();
-        testFlashcard2Values.put(FLashcardsDbHelper.TITLE, FLASHCARD_2_TITLE);
-        testFlashcard2Values.put(FLashcardsDbHelper.FLASHCARD_CONTENT, FLASHCARD_2_CONTENT);
-        testFlashcard2Values.put(FLashcardsDbHelper.FLASHCARD_ANSWER, FLASHCARD_2_ANSWER);
-        testFlashcard2Values.put(FLashcardsDbHelper.BELONGS_TO, 1);
+        testFlashcard2Values.put(MyDbHelper.TITLE, FLASHCARD_2_TITLE);
+        testFlashcard2Values.put(MyDbHelper.FLASHCARD_CONTENT, FLASHCARD_2_CONTENT);
+        testFlashcard2Values.put(MyDbHelper.FLASHCARD_ANSWER, FLASHCARD_2_ANSWER);
+        testFlashcard2Values.put(MyDbHelper.BELONGS_TO, 1);
 
-        locationRowId = db.insert(FLashcardsDbHelper.FLASHCARDS_TABLE, null, testFlashcard2Values);
+        locationRowId = db.insert(MyDbHelper.FLASHCARDS_TABLE, null, testFlashcard2Values);
 
         // Verify we got a row back.
         assertTrue(locationRowId != -1);
@@ -168,7 +168,7 @@ public class TestDB extends AndroidTestCase {
 
         // A cursor is your primary interface to the query results.
         cursor = db.query(
-                FLashcardsDbHelper.FLASHCARDS_TABLE,  // Table to Query
+                MyDbHelper.FLASHCARDS_TABLE,  // Table to Query
                 null, // all columns
                 "id=?", // Columns for the "where" clause
                 new String[] {"2"}, // Values for the "where" clause

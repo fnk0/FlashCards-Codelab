@@ -21,7 +21,7 @@ import gabilheri.com.flashcards.cardStructures.FlashCard;
  * @version 1.0
  * @since 9/19/14.
  */
-public class FLashcardsDbHelper extends SQLiteOpenHelper {
+public class MyDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = "FlashcardsDbHelper";
 
@@ -56,7 +56,7 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
     public static final String FLASHCARD_ANSWER = "answer";
 
 
-    public FLashcardsDbHelper(Context context) {
+    public MyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -371,6 +371,13 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
         return categories;
     }
 
+    /**
+     *
+     * @param category
+     *      The category to which we want all Decks
+     * @return
+     *      A list with all Decks for the specific category
+     */
     public List<Deck> getAllDecksForCategory(Category category) {
         List<Deck> decks = new ArrayList<Deck>();
         String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + _ID + " = " + category.getId() + ";";
@@ -390,6 +397,30 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
         cursor.close();
         this.closeDB();
         return decks;
+    }
+
+    /**
+     * General method to delete an entry from the Database based on it's ID
+     * @param id
+     *      The ID Of the item to be deleted
+     * @param table
+     *      The table to which the item should be deleted.
+     */
+    public void deleteFromDB(long id, String table) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table, _ID + " = ?", new String[] {String.valueOf(id)});
+        this.closeDB();
+    }
+
+    /**
+     *
+     * @param table
+     *      The Table to delete all entries
+     */
+    public void deleteAllEntriesForTable(String table) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table, null, null);
+        this.closeDB();
     }
 
     /**
