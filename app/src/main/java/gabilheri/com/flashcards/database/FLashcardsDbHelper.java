@@ -2,8 +2,10 @@ package gabilheri.com.flashcards.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import gabilheri.com.flashcards.cardStructures.Category;
 import gabilheri.com.flashcards.cardStructures.Deck;
@@ -18,10 +20,12 @@ import gabilheri.com.flashcards.cardStructures.FlashCard;
  */
 public class FLashcardsDbHelper extends SQLiteOpenHelper {
 
+    private static final String LOG_TAG = "FlashcardsDbHelper";
+
     // Database versions are used to internally tell the Framework which version of your DB to use
     // When the database constraints are changed the database them gets updated.
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "flashcards.db"; // the .db is optional.
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "flashcards.db"; // the .db is optional.
 
 
     /**
@@ -63,14 +67,16 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_DECKS_TABLE = "CREATE TABLE " + DECKS_TABLE + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 TITLE + " TEXT NOT NULL, " +
-                "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES + " + CATEGORIES_TABLE + " (" + _ID + ")" +
+                BELONGS_TO + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES " + CATEGORIES_TABLE + " (" + _ID + ")" +
                 ");";
 
-        final String SQL_CREATE_FLASHCARDS_TABLE = "CREATE TABLE " + FLASHCARDS_TABLE +
+        final String SQL_CREATE_FLASHCARDS_TABLE = "CREATE TABLE " + FLASHCARDS_TABLE + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TITLE + " TEXT NOT NULL, " +
                 FLASHCARD_CONTENT + " TEXT NOT NULL, " +
                 FLASHCARD_ANSWER + " TEXT NOT NULL, " +
+                BELONGS_TO + " INTEGER NOT NULL, " +
                 "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES " + DECKS_TABLE + " (" + _ID + ")" +
                 ");";
 
@@ -149,6 +155,105 @@ public class FLashcardsDbHelper extends SQLiteOpenHelper {
         values.put(BELONGS_TO, deck.getId());
 
         return db.insert(FLASHCARDS_TABLE, null, values);
+    }
+
+    /**
+     * Method to get a category based on it's title
+     *
+     * @param title
+     *       The title of the Category
+     * @return
+     *      A Category object
+     */
+    public Category getCategoryByTitle(String title) {
+        SQLiteDatabase db = this.getReadableDatabase(); // We get a readable database as we only want to access it
+        String selectQuery = "SELECT * FROM " + CATEGORIES_TABLE + " WHERE " + TITLE + " = '" + title + "';";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            Log.i(LOG_TAG, "Cursor is null!!");
+            return null;
+        }
+
+        Category category = new Category();
+        category.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+        category.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+        this.closeDB();
+        cursor.close();
+        return category;
+    }
+
+    /**
+     * Method to get a category based on it's title
+     *
+     * @param id
+     *       The id of the Category
+     * @return
+     *      A Category object
+     */
+    public Category getCategoryByID(long id) {
+        SQLiteDatabase db = this.getReadableDatabase(); // We get a readable database as we only want to access it
+        String selectQuery = "SELECT * FROM " + CATEGORIES_TABLE + " WHERE " + _ID + " = " + id + ";";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            Log.i(LOG_TAG, "Cursor is null!!");
+            return null;
+        }
+
+        Category category = new Category();
+        category.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+        category.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+        this.closeDB();
+        cursor.close();
+        return category;
+    }
+
+    /**
+     * Method to get a Deck based on it's title
+     *
+     * @param title
+     *        The title for the Deck
+     * @return
+     *        A Deck Object
+     */
+    public Deck getDeckByName(String title) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + TITLE + " = '" + title + "';";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            Log.i(LOG_TAG, "Cursor is null!!");
+            return null;
+        }
+
+        Deck deck = new Deck();
+        deck.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+        deck.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+
+        Category category = getCategoryByID(cursor.getLong(cursor.getColumnIndex(BELONGS_TO)));
+
+        deck.setCategory(category);
+
+        this.closeDB();
+        cursor.close();
+        return deck;
+    }
+
+
+    /**
+     * Closes the Database Connection.
+     */
+    public void closeDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null && db.isOpen())
+            db.close();
     }
 
 }

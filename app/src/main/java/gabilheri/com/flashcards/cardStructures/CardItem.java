@@ -10,7 +10,7 @@ package gabilheri.com.flashcards.cardStructures;
 public abstract class CardItem {
 
     private String title;
-    private int id;
+    private long id;
 
     protected CardItem() {
     }
@@ -27,11 +27,11 @@ public abstract class CardItem {
         this.title = title;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
