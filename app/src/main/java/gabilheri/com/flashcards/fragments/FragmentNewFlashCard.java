@@ -17,6 +17,7 @@ public class FragmentNewFlashCard extends DefaultFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.setHasOptionsMenu(false);
         return null;
     }
 

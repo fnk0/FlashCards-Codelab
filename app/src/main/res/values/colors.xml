@@ -4,4 +4,8 @@
     <color name="action_bar_text_color">#fafafa</color>
     <color name="drawer_background">#fafafa</color>
     <color name="drawer_selected">#ff9100</color>
+
+    <color name="default_button">#0277bd</color>
+    <color name="default_button_pressed">#01579b</color>
+
 </resources>

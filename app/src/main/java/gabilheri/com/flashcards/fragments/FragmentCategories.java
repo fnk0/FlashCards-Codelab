@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import gabilheri.com.flashcards.MainActivity;
 import gabilheri.com.flashcards.R;
+import gabilheri.com.flashcards.cardStructures.Category;
+import gabilheri.com.flashcards.cards.CategoryCard;
+import gabilheri.com.flashcards.database.MyDbHelper;
 import gabilheri.com.flashcards.fab.FloatingActionButton;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
@@ -21,7 +25,7 @@ import it.gmariotti.cardslib.library.view.CardListView;
  * @version 1.0
  * @since 9/7/14.
  */
-public class FragmentCategories extends DefaultFragment {
+public class FragmentCategories extends DefaultFragment implements View.OnClickListener {
 
     /**
      * Declare the Instance variables that will be used by this fragment
@@ -50,18 +54,32 @@ public class FragmentCategories extends DefaultFragment {
         buttonFab = (FloatingActionButton) view.findViewById(R.id.addNewCategory);
         buttonFab.setColor(getResources().getColor(R.color.action_bar_color));
         buttonFab.setTextColor(getResources().getColor(R.color.action_bar_text_color));
+        buttonFab.setOnClickListener(this);
 
         // We initialize the CardsList and add some Dummy Data for now.
         // We will come back to this point to add our Custom Card matching our App UI as well with real data from a Database.
         mCategoriesList = (CardListView) view.findViewById(R.id.categoriesList);
         mCardsList = new ArrayList<Card>();
-        for (int i = 0; i < 10; i++) {
-            Card card = new Card(getActivity());
-            card.setTitle("Category " + i);
+
+        MyDbHelper dbHelper = new MyDbHelper(getActivity());
+        List<Category> categories = dbHelper.getAllCategories();
+
+        for (int i = 0; i < categories.size(); i++) {
+            CategoryCard card = new CategoryCard(getActivity());
+            card.setCategory(categories.get(i));
             mCardsList.add(card);
         }
+
         mCardAdapter = new CardArrayAdapter(getActivity(), mCardsList);
         mCardAdapter.setEnableUndo(true);
         mCategoriesList.setAdapter(mCardAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId() == buttonFab.getId()) {
+            ((MainActivity) getActivity()).displayView(MainActivity.NEW_CATEGORY_FRAG, null);
+        }
     }
 }

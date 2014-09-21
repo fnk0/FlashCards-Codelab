@@ -5,7 +5,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="category_name">Category Name</string>
+    <string name="create_category">Create Category</string>
 
+    <string name="new_cat_title">New Category</string>
+    <string name="new_deck_title">New Deck</string>
+    <string name="new_flashcard_title">New FlashCard</string>
 
     <!-- Navigation Drawer Stuff! -->
 

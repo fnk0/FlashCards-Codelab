@@ -7,9 +7,11 @@ import android.util.Log;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import gabilheri.com.flashcards.fragments.DefaultFragment;
 import gabilheri.com.flashcards.fragments.FragmentCategories;
+import gabilheri.com.flashcards.fragments.FragmentNewCategory;
 import gabilheri.com.flashcards.navDrawer.NavDrawerAdapter;
 import gabilheri.com.flashcards.navDrawer.NavDrawerItem;
 
@@ -29,6 +31,7 @@ public class MainActivity extends DrawerLayoutActivity {
     private NavDrawerAdapter mNavDrawerAdapter;
     private ArrayList<NavDrawerItem> navDrawerItems;
     private String[] navMenuTitles;
+    private HashMap<Integer, String> fragmentTitles;
 
 
     @Override
@@ -46,6 +49,12 @@ public class MainActivity extends DrawerLayoutActivity {
         navIcons.recycle();
 
         mNavDrawerAdapter = new NavDrawerAdapter(this, navDrawerItems);
+
+        // We need a HashMap to map the Title of the fragments that are not on our Nav Drawer
+        fragmentTitles = new HashMap<Integer, String>();
+        fragmentTitles.put(NEW_CATEGORY_FRAG, getString(R.string.new_cat_title));
+        fragmentTitles.put(NEW_DECK_FRAG, getString(R.string.new_deck_title));
+        fragmentTitles.put(NEW_FLASHCARD_FRAG, getString(R.string.new_flashcard_title));
     }
 
     @Override
@@ -56,6 +65,9 @@ public class MainActivity extends DrawerLayoutActivity {
                 activeFragment = new FragmentCategories(); // Set the ActiveFragment to our selected item on the list
                 break;
             case SETTINGS_FRAG:
+                break;
+            case NEW_CATEGORY_FRAG:
+                activeFragment = new FragmentNewCategory();
                 break;
             default:
                 break;
@@ -68,13 +80,17 @@ public class MainActivity extends DrawerLayoutActivity {
                     .replace(R.id.frame_container, activeFragment) // We then replace whatever is inside FrameLayout to our activeFragment
                     .commit(); // Commit the change
             // update selected item and title
-            getDrawerList().setItemChecked(position, true); // We now set the item on the drawer that has been cliced as active
-            getDrawerList().setSelection(position); // Same concept as above...
-            setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
+            if(position >= 0) {
+                getDrawerList().setItemChecked(position, true); // We now set the item on the drawer that has been cliced as active
+                getDrawerList().setSelection(position); // Same concept as above...
+                setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
+            } else {
+                setTitle(fragmentTitles.get(position)); // We not change the title of the Action Bar to match our fragment.
+            }
+
         } else {
             Log.i(getLogTag(), "Error creating fragment"); // if the fragment does not create we Log an error.
         }
-
     }
 
     /**

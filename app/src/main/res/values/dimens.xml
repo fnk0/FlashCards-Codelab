@@ -4,4 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="action_bar_size">56dip</dimen>
     <dimen name="fab_button">36sp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_base_empty_height">88dp</dimen>
+    <dimen name="card_background_default_radius">2dip</dimen>
+
 </resources>
