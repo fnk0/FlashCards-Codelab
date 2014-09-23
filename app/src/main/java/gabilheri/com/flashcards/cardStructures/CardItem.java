@@ -11,6 +11,7 @@ public abstract class CardItem {
 
     private String title;
     private long id;
+    private int color;
 
     protected CardItem() {
     }
@@ -33,5 +34,13 @@ public abstract class CardItem {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

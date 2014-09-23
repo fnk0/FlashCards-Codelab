@@ -126,16 +126,16 @@ public class MyDbHelper extends SQLiteOpenHelper {
      *
      * @param deck
      *      The deck to be inserted
-     * @param category
+     * @param categoryId
      *      The category to which this Deck belongs to
      * @return
      *      The inserted statement for the Database - Used internally by Android
      */
-    public long createDeck(Deck deck, Category category) {
+    public long createDeck(Deck deck, long categoryId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TITLE, deck.getTitle());
-        values.put(BELONGS_TO, category.getId()); // We get the ID of the categories so we can reference through a foreign key
+        values.put(BELONGS_TO, categoryId); // We get the ID of the categories so we can reference through a foreign key
         return db.insert(DECKS_TABLE, null, values);
     }
 
@@ -144,18 +144,48 @@ public class MyDbHelper extends SQLiteOpenHelper {
      *
      * @param flashCard
      *      The flashcard to be inserted
-     * @param deck
+     * @param deckId
      *      The Deck to which this flashcard belongs to
      * @return
      *      The inserted statement for the Database - Used internally by Android
      */
-    public long creareFlashCard(FlashCard flashCard, Deck deck) {
+    public long creareFlashCard(FlashCard flashCard, long deckId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TITLE, flashCard.getTitle());
         values.put(FLASHCARD_CONTENT, flashCard.getContent());
         values.put(FLASHCARD_ANSWER, flashCard.getAnswer());
-        values.put(BELONGS_TO, deck.getId());
+        values.put(BELONGS_TO, deckId);
+
+        return db.insert(FLASHCARDS_TABLE, null, values);
+    }
+
+    public long undoCategory(Category category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(_ID, category.getId());
+        values.put(TITLE, category.getTitle());
+
+        return db.insert(CATEGORIES_TABLE, null, values);
+    }
+
+    public long undoDeck(Deck deck) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(_ID, deck.getId());
+        values.put(TITLE, deck.getTitle());
+        values.put(BELONGS_TO, deck.getCategory().getId());
+        return db.insert(DECKS_TABLE, null, values);
+    }
+
+    public long undoFlashcard(FlashCard flashCard) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(_ID, flashCard.getId());
+        values.put(TITLE, flashCard.getTitle());
+        values.put(FLASHCARD_CONTENT, flashCard.getContent());
+        values.put(FLASHCARD_ANSWER, flashCard.getAnswer());
+        values.put(BELONGS_TO, flashCard.getDeck().getId());
 
         return db.insert(FLASHCARDS_TABLE, null, values);
     }
@@ -318,15 +348,15 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @param deck
+     * @param id
      *      The desired deck to which we want all the FlashCards
      * @return
      *      A list with all the FlashCards
      */
-    public List<FlashCard> getAllFlashCardsForDeck(Deck deck) {
+    public List<FlashCard> getAllFlashCardsForDeckId(Long id) {
 
         List<FlashCard> flashCards = new ArrayList<FlashCard>();
-        String selectQuery = "SELECT * FROM " + FLASHCARDS_TABLE + " WHERE " + _ID + " = " + deck.getId() + ";";
+        String selectQuery = "SELECT * FROM " + FLASHCARDS_TABLE + " WHERE " + _ID + " = " + id + ";";
 
         SQLiteDatabase db  = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -338,7 +368,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 flashCard.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
                 flashCard.setContent(cursor.getString(cursor.getColumnIndex(FLASHCARD_CONTENT)));
                 flashCard.setAnswer(cursor.getString(cursor.getColumnIndex(FLASHCARD_ANSWER)));
-                flashCard.setDeck(deck);
+                flashCard.setDeck(getDeckByID(id));
                 flashCards.add(flashCard);
             } while (cursor.moveToNext());
         }
@@ -373,14 +403,14 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @param category
+     * @param id
      *      The category to which we want all Decks
      * @return
      *      A list with all Decks for the specific category
      */
-    public List<Deck> getAllDecksForCategory(Category category) {
+    public List<Deck> getAllDecksForCategoryId(long id) {
         List<Deck> decks = new ArrayList<Deck>();
-        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + _ID + " = " + category.getId() + ";";
+        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + _ID + " = " + id + ";";
 
         SQLiteDatabase db  = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -390,7 +420,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 Deck deck = new Deck();
                 deck.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
                 deck.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
-                deck.setCategory(category);
+                deck.setCategory(getCategoryByID(id));
                 decks.add(deck);
             } while (cursor.moveToNext());
         }

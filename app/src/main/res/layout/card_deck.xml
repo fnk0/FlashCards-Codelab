@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:paddingTop="8dip"
+    android:paddingBottom="8dip"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:gravity="center_vertical"
+    android:layout_height="88dip">
+
+    <ImageView
+        android:src="@drawable/ic_decks"
+        android:layout_width="72dip"
+        android:layout_height="72dip" />
+
+    <TextView
+        android:id="@+id/titleDeck"
+        android:text="@string/deck_name"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:textSize="28sp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

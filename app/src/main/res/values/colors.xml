@@ -7,5 +7,7 @@
 
     <color name="default_button">#0277bd</color>
     <color name="default_button_pressed">#01579b</color>
+    <color name="card_undobar_material_text_color">#40c4ff</color>
+    <color name="card_undobar_material_background_color">#EE323232</color>
 
 </resources>

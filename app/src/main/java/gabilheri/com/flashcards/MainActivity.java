@@ -9,8 +9,11 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import gabilheri.com.flashcards.database.MyDbHelper;
 import gabilheri.com.flashcards.fragments.DefaultFragment;
 import gabilheri.com.flashcards.fragments.FragmentCategories;
+import gabilheri.com.flashcards.fragments.FragmentDecks;
+import gabilheri.com.flashcards.fragments.FragmentFlashCards;
 import gabilheri.com.flashcards.fragments.FragmentNewCategory;
 import gabilheri.com.flashcards.navDrawer.NavDrawerAdapter;
 import gabilheri.com.flashcards.navDrawer.NavDrawerItem;
@@ -21,6 +24,8 @@ public class MainActivity extends DrawerLayoutActivity {
     // We use this to know which of the items has been selected.
     // We name the items so we know which one is which.
     // For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
+    public static final int FLASHCARDS_FRAG = -5;
+    public static final int DECKS_FRAG = -4;
     public static final int NEW_FLASHCARD_FRAG = -3;
     public static final int NEW_DECK_FRAG = -2;
     public static final int NEW_CATEGORY_FRAG = -1;
@@ -69,9 +74,20 @@ public class MainActivity extends DrawerLayoutActivity {
             case NEW_CATEGORY_FRAG:
                 activeFragment = new FragmentNewCategory();
                 break;
+            case DECKS_FRAG:
+                activeFragment = new FragmentDecks();
+                break;
+            case FLASHCARDS_FRAG:
+                activeFragment = new FragmentFlashCards();
+                break;
             default:
                 break;
         }
+
+        if(fragmentBundle != null) {
+            activeFragment.setArguments(fragmentBundle);
+        }
+
         if(activeFragment != null) {
             FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
             fragmentManager.beginTransaction() // Start the transaction of fragment change
@@ -85,7 +101,12 @@ public class MainActivity extends DrawerLayoutActivity {
                 getDrawerList().setSelection(position); // Same concept as above...
                 setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
             } else {
-                setTitle(fragmentTitles.get(position)); // We not change the title of the Action Bar to match our fragment.
+                if(fragmentBundle == null) {
+                    setTitle(fragmentTitles.get(position)); // We not change the title of the Action Bar to match our fragment.
+                } else {
+                    setTitle(fragmentBundle.getString(MyDbHelper.TITLE));
+                }
+
             }
 
         } else {

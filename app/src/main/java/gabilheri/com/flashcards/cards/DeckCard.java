@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import gabilheri.com.flashcards.MainActivity;
 import gabilheri.com.flashcards.R;
-import gabilheri.com.flashcards.cardStructures.Category;
+import gabilheri.com.flashcards.cardStructures.Deck;
 import gabilheri.com.flashcards.database.MyDbHelper;
 import it.gmariotti.cardslib.library.internal.Card;
 
@@ -17,15 +17,16 @@ import it.gmariotti.cardslib.library.internal.Card;
  *
  * @author Marcus Gabilheri
  * @version 1.0
- * @since 9/8/14.
+ * @since 9/22/14.
  */
-public class CategoryCard extends Card implements Card.OnSwipeListener, Card.OnCardClickListener, Card.OnUndoSwipeListListener {
+public class DeckCard extends Card implements Card.OnCardClickListener, Card.OnSwipeListener, Card.OnUndoSwipeListListener {
 
-    private Category category;
+    private Deck deck;
     private MyDbHelper helper;
 
-    public CategoryCard(Context context) {
-        super(context, R.layout.card_category);
+
+    public DeckCard(Context context) {
+        super(context, R.layout.card_deck);
         helper = new MyDbHelper(context);
         this.setSwipeable(true);
         this.setOnClickListener(this);
@@ -33,41 +34,40 @@ public class CategoryCard extends Card implements Card.OnSwipeListener, Card.OnC
         this.setOnUndoSwipeListListener(this);
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
         super.setupInnerViewElements(parent, view);
 
-        TextView categoryTitle = (TextView) view.findViewById(R.id.titleCategory);
+        TextView deckTitle = (TextView) view.findViewById(R.id.titleDeck);
 
-        if(category != null) {
-            categoryTitle.setText(category.getTitle());
+        if(deck != null) {
+            deckTitle.setText(deck.getTitle());
         }
     }
 
     @Override
     public void onClick(Card card, View view) {
-        Bundle bundle = new Bundle();
-        bundle.putLong(MyDbHelper._ID, category.getId());
-        bundle.putString(MyDbHelper.TITLE, category.getTitle());
-
-        ((MainActivity) getContext()).displayView(MainActivity.DECKS_FRAG, bundle);
+        Bundle b = new Bundle();
+        b.putLong(MyDbHelper._ID, deck.getId());
+        b.putString(MyDbHelper.TITLE, deck.getTitle());
+        ((MainActivity) getContext()).displayView(MainActivity.FLASHCARDS_FRAG, b);
     }
 
     @Override
     public void onSwipe(Card card) {
-        helper.deleteFromDB(category.getId(), MyDbHelper.CATEGORIES_TABLE);
+        helper.deleteFromDB(deck.getId(), MyDbHelper.DECKS_TABLE);
     }
 
     @Override
     public void onUndoSwipe(Card card) {
-        helper.undoCategory(category);
+        helper.undoDeck(deck);
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
     }
 }

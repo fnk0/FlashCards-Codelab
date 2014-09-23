@@ -10,6 +10,8 @@
     <string name="new_cat_title">New Category</string>
     <string name="new_deck_title">New Deck</string>
     <string name="new_flashcard_title">New FlashCard</string>
+    <string name="deck_name">Deck Name</string>
+    <string name="flashcard_title">Flashcard Title</string>
 
     <!-- Navigation Drawer Stuff! -->
 
