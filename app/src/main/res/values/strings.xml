@@ -12,6 +12,9 @@
     <string name="new_flashcard_title">New FlashCard</string>
     <string name="deck_name">Deck Name</string>
     <string name="flashcard_title">Flashcard Title</string>
+    <string name="flashcard_content">Flashcard Content...</string>
+    <string name="flashcard_answer">Flashcard Answer</string>
+    <string name="flashcard_content_dummy">Flashcard Content</string>
 
     <!-- Navigation Drawer Stuff! -->
 

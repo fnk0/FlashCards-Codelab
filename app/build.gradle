@@ -22,5 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar']) // Will compile all the Libraries inside the 'libs' folder
     compile 'com.android.support:support-v4:19.1.0' // We will be using the support library for the Drawer layout
+    compile 'com.android.support:support-v13:20.0.0'
     compile 'com.github.gabrielemariotti.cards:library:1.9.1' // Very good library to use cards
 }

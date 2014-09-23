@@ -149,7 +149,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
      * @return
      *      The inserted statement for the Database - Used internally by Android
      */
-    public long creareFlashCard(FlashCard flashCard, long deckId) {
+    public long createFlashCard(FlashCard flashCard, long deckId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TITLE, flashCard.getTitle());
@@ -356,7 +356,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
     public List<FlashCard> getAllFlashCardsForDeckId(Long id) {
 
         List<FlashCard> flashCards = new ArrayList<FlashCard>();
-        String selectQuery = "SELECT * FROM " + FLASHCARDS_TABLE + " WHERE " + _ID + " = " + id + ";";
+        String selectQuery = "SELECT * FROM " + FLASHCARDS_TABLE + " WHERE " + BELONGS_TO + " = " + id + ";";
 
         SQLiteDatabase db  = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -410,7 +410,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
      */
     public List<Deck> getAllDecksForCategoryId(long id) {
         List<Deck> decks = new ArrayList<Deck>();
-        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + _ID + " = " + id + ";";
+        String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + BELONGS_TO + " = " + id + ";";
 
         SQLiteDatabase db  = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

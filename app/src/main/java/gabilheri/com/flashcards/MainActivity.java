@@ -13,8 +13,10 @@ import gabilheri.com.flashcards.database.MyDbHelper;
 import gabilheri.com.flashcards.fragments.DefaultFragment;
 import gabilheri.com.flashcards.fragments.FragmentCategories;
 import gabilheri.com.flashcards.fragments.FragmentDecks;
-import gabilheri.com.flashcards.fragments.FragmentFlashCards;
+import gabilheri.com.flashcards.fragments.FragmentFlashCardsList;
 import gabilheri.com.flashcards.fragments.FragmentNewCategory;
+import gabilheri.com.flashcards.fragments.FragmentNewDeck;
+import gabilheri.com.flashcards.fragments.FragmentNewFlashCard;
 import gabilheri.com.flashcards.navDrawer.NavDrawerAdapter;
 import gabilheri.com.flashcards.navDrawer.NavDrawerItem;
 
@@ -24,6 +26,7 @@ public class MainActivity extends DrawerLayoutActivity {
     // We use this to know which of the items has been selected.
     // We name the items so we know which one is which.
     // For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
+    public static final int FLASHCARDS_VIEWER = -6;
     public static final int FLASHCARDS_FRAG = -5;
     public static final int DECKS_FRAG = -4;
     public static final int NEW_FLASHCARD_FRAG = -3;
@@ -74,11 +77,19 @@ public class MainActivity extends DrawerLayoutActivity {
             case NEW_CATEGORY_FRAG:
                 activeFragment = new FragmentNewCategory();
                 break;
+            case NEW_DECK_FRAG:
+                activeFragment = new FragmentNewDeck();
+                break;
             case DECKS_FRAG:
                 activeFragment = new FragmentDecks();
                 break;
             case FLASHCARDS_FRAG:
-                activeFragment = new FragmentFlashCards();
+                activeFragment = new FragmentFlashCardsList();
+                break;
+            case NEW_FLASHCARD_FRAG:
+                activeFragment = new FragmentNewFlashCard();
+                break;
+            case FLASHCARDS_VIEWER:
                 break;
             default:
                 break;

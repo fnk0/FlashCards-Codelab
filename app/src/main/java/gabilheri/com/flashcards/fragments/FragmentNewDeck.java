@@ -57,8 +57,9 @@ public class FragmentNewDeck extends DefaultFragment implements View.OnClickList
                 deck.setTitle(deckName.getText().toString());
                 try {
                     dbHelper.createDeck(deck, b.getLong(MyDbHelper._ID));
+                    Log.i(LOG_TAG, "The id of the category is: " + b.getLong(MyDbHelper._ID));
                     Utils.hideKeyboard(getActivity());
-                    ((MainActivity) getActivity()).displayView(MainActivity.DECKS_FRAG, null);
+                    ((MainActivity) getActivity()).displayView(MainActivity.DECKS_FRAG, b);
                 } catch (Exception ex) {
                     Log.i(LOG_TAG, "Could not create Deck");
                 }

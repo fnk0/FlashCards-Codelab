@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import gabilheri.com.flashcards.MainActivity;
 import gabilheri.com.flashcards.R;
 import gabilheri.com.flashcards.cardStructures.Deck;
 import gabilheri.com.flashcards.cards.DeckCard;
@@ -33,6 +34,8 @@ public class FragmentDecks extends DefaultFragment implements View.OnClickListen
     private CardListView mDecksList;
     private CardArrayAdapter mCardAdapter;
     private FloatingActionButton buttonFab;
+    private String title;
+    private long id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,10 +57,12 @@ public class FragmentDecks extends DefaultFragment implements View.OnClickListen
         mCardsList = new ArrayList<Card>();
 
         Bundle b = getArguments();
-        getActivity().setTitle(b.getString(MyDbHelper.TITLE));
+        title = b.getString(MyDbHelper.TITLE);
+        id = b.getLong(MyDbHelper._ID);
+        getActivity().setTitle(title);
         MyDbHelper dbHelper = new MyDbHelper(getActivity());
-        List<Deck> decks = dbHelper.getAllDecksForCategoryId(b.getLong(MyDbHelper._ID));
-
+        List<Deck> decks = dbHelper.getAllDecksForCategoryId(id);
+        
         for (int i = 0; i < decks.size(); i++) {
             DeckCard card = new DeckCard(getActivity());
             card.setId(String.valueOf(decks.get(i).getId()));
@@ -72,6 +77,9 @@ public class FragmentDecks extends DefaultFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-
+        Bundle b = new Bundle();
+        b.putLong(MyDbHelper._ID, id);
+        b.putString(MyDbHelper.TITLE, title);
+        ((MainActivity) getActivity()).displayView(MainActivity.NEW_DECK_FRAG, b);
     }
 }

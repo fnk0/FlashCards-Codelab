@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import gabilheri.com.flashcards.MainActivity;
 import gabilheri.com.flashcards.R;
 import gabilheri.com.flashcards.cardStructures.FlashCard;
 import gabilheri.com.flashcards.cards.ListFlashCardCard;
@@ -24,7 +25,7 @@ import it.gmariotti.cardslib.library.view.CardListView;
  * @version 1.0
  * @since 9/22/14.
  */
-public class FragmentFlashCards extends DefaultFragment implements View.OnClickListener {
+public class FragmentFlashCardsList extends DefaultFragment implements View.OnClickListener {
 
     /**
      * Declare the Instance variables that will be used by this fragment
@@ -33,6 +34,7 @@ public class FragmentFlashCards extends DefaultFragment implements View.OnClickL
     private CardListView mFlashCardsList;
     private CardArrayAdapter mCardAdapter;
     private FloatingActionButton buttonFab;
+    private Bundle b;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class FragmentFlashCards extends DefaultFragment implements View.OnClickL
         mFlashCardsList = (CardListView) view.findViewById(R.id.flashcardList);
         mCardsList = new ArrayList<Card>();
 
-        Bundle b = getArguments();
+        b = getArguments();
         getActivity().setTitle(b.getString(MyDbHelper.TITLE));
         MyDbHelper dbHelper = new MyDbHelper(getActivity());
         List<FlashCard> flashcards = dbHelper.getAllFlashCardsForDeckId(b.getLong(MyDbHelper._ID));
@@ -72,7 +74,7 @@ public class FragmentFlashCards extends DefaultFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
+        ((MainActivity) getActivity()).displayView(MainActivity.NEW_FLASHCARD_FRAG, b);
     }
 
 }
