@@ -48,11 +48,9 @@ public class FragmentFlashCardViewer extends DefaultFragment implements View.OnC
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
 
-            } else if (position == 1) {
 
-            }
+
             return mFragment;
         }
 

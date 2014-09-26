@@ -16,7 +16,6 @@ import it.gmariotti.cardslib.library.internal.Card;
  */
 public class FlashCardViewerCard extends Card implements Card.OnCardClickListener {
 
-
     public FlashCardViewerCard(Context context) {
         super(context, R.layout.flashcard_content);
     }
@@ -30,4 +29,6 @@ public class FlashCardViewerCard extends Card implements Card.OnCardClickListene
     public void onClick(Card card, View view) {
 
     }
+
+
 }
