@@ -1,7 +1,11 @@
 package gabilheri.com.flashcards.fragments;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,6 +43,7 @@ public class FragmentFlashCardsList extends DefaultFragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_flashcards, container, false);
     }
 
@@ -77,4 +82,24 @@ public class FragmentFlashCardsList extends DefaultFragment implements View.OnCl
         ((MainActivity) getActivity()).displayView(MainActivity.NEW_FLASHCARD_FRAG, b);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem deleteItem = menu.add(Menu.NONE, 1, 10, "STUDY");
+        deleteItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case 1:
+                ((MainActivity) getActivity()).displayView(MainActivity.FLASHCARDS_VIEWER, b);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
+    }
 }

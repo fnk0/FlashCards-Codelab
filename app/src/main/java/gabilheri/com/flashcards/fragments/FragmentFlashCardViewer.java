@@ -5,11 +5,18 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gabilheri.com.flashcards.R;
+import gabilheri.com.flashcards.cardStructures.FlashCard;
+import gabilheri.com.flashcards.cards.FlashCardViewerCard;
+import gabilheri.com.flashcards.database.MyDbHelper;
 
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
@@ -21,15 +28,61 @@ import gabilheri.com.flashcards.R;
 public class FragmentFlashCardViewer extends DefaultFragment implements View.OnClickListener {
 
     private static final String LOG_TAG = FragmentFlashCardViewer.class.getSimpleName();
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private List<FlashCardViewerCard> mCardsList;
+    private MyDbHelper dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         return inflater.inflate(R.layout.fragment_flashcard_viewer, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        Bundle b = getArguments();
+
+        if(b != null) {
+            b = savedInstanceState;
+        }
+
+        dbHelper = new MyDbHelper(getActivity());
+        mCardsList = new ArrayList<FlashCardViewerCard>();
+        List<FlashCard> flashcards = dbHelper.getAllFlashCardsForDeckId(b.getLong(MyDbHelper._ID));
+
+        for(int i = 0; i < flashcards.size(); i++) {
+            FlashCardViewerCard card = new FlashCardViewerCard(getActivity());
+            card.setId(String.valueOf(flashcards.get(i).getId()));
+            card.setCard(flashcards.get(i));
+            mCardsList.add(card);
+        }
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mViewPager = (ViewPager) view.findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -49,14 +102,15 @@ public class FragmentFlashCardViewer extends DefaultFragment implements View.OnC
         @Override
         public Fragment getItem(int position) {
 
-
+            mFragment = new FragmentFlashcard();
+            ((FragmentFlashcard) mFragment).setCard(mCardsList.get(position));
 
             return mFragment;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return mCardsList.size();
         }
 
         @Override

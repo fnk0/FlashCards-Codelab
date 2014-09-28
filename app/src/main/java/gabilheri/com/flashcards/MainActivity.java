@@ -13,6 +13,7 @@ import gabilheri.com.flashcards.database.MyDbHelper;
 import gabilheri.com.flashcards.fragments.DefaultFragment;
 import gabilheri.com.flashcards.fragments.FragmentCategories;
 import gabilheri.com.flashcards.fragments.FragmentDecks;
+import gabilheri.com.flashcards.fragments.FragmentFlashCardViewer;
 import gabilheri.com.flashcards.fragments.FragmentFlashCardsList;
 import gabilheri.com.flashcards.fragments.FragmentNewCategory;
 import gabilheri.com.flashcards.fragments.FragmentNewDeck;
@@ -90,6 +91,7 @@ public class MainActivity extends DrawerLayoutActivity {
                 activeFragment = new FragmentNewFlashCard();
                 break;
             case FLASHCARDS_VIEWER:
+                activeFragment = new FragmentFlashCardViewer();
                 break;
             default:
                 break;
