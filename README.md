@@ -477,7 +477,7 @@ Nav Drawer Item XML:
         android:layout_toRightOf="@id/navDrawerIcon"
         android:layout_toEndOf="@id/navDrawerIcon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/listPreferredItemHeightLarge"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:gravity="center_vertical"
     />
 </RelativeLayout>
