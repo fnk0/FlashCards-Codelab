@@ -24,6 +24,9 @@ import gabilheri.com.flashcards.navDrawer.NavDrawerItem;
 
 public class MainActivity extends DrawerLayoutActivity {
 
+    private static final String TAG_ACTIVE_FRAGMENT = "fragment_active";
+
+
     // We use this to know which of the items has been selected.
     // We name the items so we know which one is which.
     // For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
@@ -41,6 +44,7 @@ public class MainActivity extends DrawerLayoutActivity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private String[] navMenuTitles;
     private HashMap<Integer, String> fragmentTitles;
+    private Bundle currentBundle;
 
 
     @Override
@@ -67,7 +71,15 @@ public class MainActivity extends DrawerLayoutActivity {
     }
 
     @Override
+    public void restoreFragment(Bundle savedInstanceState) {
+            //Restore the fragment's instance
+            activeFragment = (DefaultFragment) getFragmentManager().getFragment(savedInstanceState, "activeFragment");
+    }
+
+    @Override
     public void displayView(int position, Bundle fragmentBundle) {
+
+        FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
 
         switch (position) {
             case CATEGORIES_FRAG:
@@ -97,16 +109,18 @@ public class MainActivity extends DrawerLayoutActivity {
                 break;
         }
 
-        if(fragmentBundle != null) {
-            activeFragment.setArguments(fragmentBundle);
-        }
-
         if(activeFragment != null) {
-            FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
+
+            if(fragmentBundle != null) {
+                currentBundle = fragmentBundle;
+                activeFragment.setArguments(fragmentBundle);
+            }
+
             fragmentManager.beginTransaction() // Start the transaction of fragment change
                     .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out, // Animations for the fragment in...
                             R.animator.alpha_in, R.animator.alpha_out) // Animations for the fragment out...
-                    .replace(R.id.frame_container, activeFragment) // We then replace whatever is inside FrameLayout to our activeFragment
+                    .replace(R.id.frame_container, activeFragment, TAG_ACTIVE_FRAGMENT) // We then replace whatever is inside FrameLayout to our activeFragment
+                    .addToBackStack(null) // null = name of the fragment on the stack.
                     .commit(); // Commit the change
             // update selected item and title
             if(position >= 0) {
@@ -140,5 +154,11 @@ public class MainActivity extends DrawerLayoutActivity {
     @Override
     protected BaseAdapter getAdapter() {
         return mNavDrawerAdapter;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getFragmentManager().putFragment(outState, "activeFragment", activeFragment);
     }
 }

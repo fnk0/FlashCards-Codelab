@@ -18,12 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <TextSwitcher
         android:id="@+id/flashcardContentAnswer"
         android:textSize="30sp"
         android:text="@string/flashcard_content_dummy"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right"
+    />
 
 </LinearLayout>

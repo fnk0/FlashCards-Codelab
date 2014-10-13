@@ -1,6 +1,5 @@
 package gabilheri.com.flashcards.fragments;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -85,8 +84,8 @@ public class FragmentFlashCardsList extends DefaultFragment implements View.OnCl
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        MenuItem deleteItem = menu.add(Menu.NONE, 1, 10, "STUDY");
-        deleteItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItem studyItem = menu.add(Menu.NONE, 1, 10, "STUDY");
+        studyItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override

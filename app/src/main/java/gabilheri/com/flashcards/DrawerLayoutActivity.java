@@ -71,7 +71,9 @@ public abstract class DrawerLayoutActivity extends Activity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if(savedInstanceState == null) {
+        if(savedInstanceState != null) {
+            restoreFragment(savedInstanceState);
+        } else if(savedInstanceState == null) {
             displayView(0, null);
         }
     }
@@ -136,6 +138,12 @@ public abstract class DrawerLayoutActivity extends Activity {
     public abstract void displayView(int position, Bundle fragmentBundle);
 
     /**
+     *
+     * @param savedInstanceState
+     */
+    public abstract void restoreFragment(Bundle savedInstanceState);
+
+    /**
      * Any specific initializations should go here.
      */
     public abstract void init();
@@ -193,4 +201,14 @@ public abstract class DrawerLayoutActivity extends Activity {
      * @return
      */
     protected abstract BaseAdapter getAdapter();
+
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+           getFragmentManager().popBackStack();
+        }
+    }
 }

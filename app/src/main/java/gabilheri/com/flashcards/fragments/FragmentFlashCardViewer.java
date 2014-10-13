@@ -37,6 +37,7 @@ public class FragmentFlashCardViewer extends DefaultFragment implements View.OnC
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private List<FlashCardViewerCard> mCardsList;
     private MyDbHelper dbHelper;
+    private Bundle activeBundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,15 +48,15 @@ public class FragmentFlashCardViewer extends DefaultFragment implements View.OnC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        Bundle b = getArguments();
+        activeBundle = getArguments();
 
-        if(b != null) {
-            b = savedInstanceState;
+        if(activeBundle == null) {
+            activeBundle = savedInstanceState;
         }
 
         dbHelper = new MyDbHelper(getActivity());
         mCardsList = new ArrayList<FlashCardViewerCard>();
-        List<FlashCard> flashcards = dbHelper.getAllFlashCardsForDeckId(b.getLong(MyDbHelper._ID));
+        List<FlashCard> flashcards = dbHelper.getAllFlashCardsForDeckId(activeBundle.getLong(MyDbHelper._ID));
 
         for(int i = 0; i < flashcards.size(); i++) {
             FlashCardViewerCard card = new FlashCardViewerCard(getActivity());
@@ -83,6 +84,16 @@ public class FragmentFlashCardViewer extends DefaultFragment implements View.OnC
 
             }
         });
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onClick(View v) {
 
     }
 
@@ -118,10 +129,4 @@ public class FragmentFlashCardViewer extends DefaultFragment implements View.OnC
             return super.getItemPosition(object);
         }
     }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
 }

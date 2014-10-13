@@ -26,7 +26,6 @@ import android.view.ViewGroup;
  */
 public abstract class DefaultFragment extends Fragment {
 
-
     @Override
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         FragmentManager fm = getFragmentManager();
@@ -72,6 +71,10 @@ public abstract class DefaultFragment extends Fragment {
     public abstract void onViewCreated(View view, Bundle savedInstanceState);
 
     /**
+     *
+     * This method will only be called once when the retained
+     * Fragment is first created.
+     *
      * @param savedInstanceState
      *         If the fragment is being re-created from
      *         a previous saved state, this is the state.
@@ -79,7 +82,10 @@ public abstract class DefaultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
     }
+
 
     /**
      * @param menu

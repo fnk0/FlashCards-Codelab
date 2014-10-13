@@ -1,9 +1,12 @@
 package gabilheri.com.flashcards.cards;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import gabilheri.com.flashcards.R;
 import gabilheri.com.flashcards.cardStructures.FlashCard;
@@ -18,12 +21,16 @@ import it.gmariotti.cardslib.library.internal.Card;
  */
 public class FlashCardViewerCard extends Card implements Card.OnCardClickListener {
 
+    private static String LOG_TAG = FlashCardViewerCard.class.getCanonicalName();
     private FlashCard card;
-    private TextView flashCardTitle, flashCardContentAnswer;
+    private TextView flashCardTitle;
+    private TextSwitcher flashCardContentAnswer;
+    private boolean isAnswer = false;
 
 
     public FlashCardViewerCard(Context context) {
         super(context, R.layout.flashcard_content);
+        setOnClickListener(this);
     }
 
     @Override
@@ -31,8 +38,8 @@ public class FlashCardViewerCard extends Card implements Card.OnCardClickListene
         super.setupInnerViewElements(parent, view);
 
         flashCardTitle = (TextView) view.findViewById(R.id.titleFlashcard);
-        flashCardContentAnswer = (TextView) view.findViewById(R.id.flashcardContentAnswer);
-
+        flashCardContentAnswer = (TextSwitcher) view.findViewById(R.id.flashcardContentAnswer);
+        flashCardContentAnswer.setFactory(mFactory);
         if(card != null) {
             flashCardTitle.setText(card.getTitle());
             flashCardContentAnswer.setText(card.getContent());
@@ -50,6 +57,25 @@ public class FlashCardViewerCard extends Card implements Card.OnCardClickListene
 
     @Override
     public void onClick(Card card, View view) {
-
+        if(isAnswer) {
+            flashCardContentAnswer.setText(getCard().getContent());
+            isAnswer = false;
+        } else {
+            flashCardContentAnswer.setText(getCard().getAnswer());
+            isAnswer = true;
+        }
     }
+
+    private ViewSwitcher.ViewFactory mFactory = new ViewSwitcher.ViewFactory() {
+
+        @Override
+        public View makeView() {
+
+            // Create a new TextView
+            TextView t = new TextView(getContext());
+            t.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            t.setTextAppearance(getContext(), android.R.style.TextAppearance_Large);
+            return t;
+        }
+    };
 }
