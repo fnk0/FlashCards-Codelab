@@ -35,8 +35,8 @@ If everything went well the project will now be created and you should be seeing
 
 
 ###### Adding Dependencies
-Android studio uses the [Gradle](http://www.gradle.org/) with the [Android plugin](http://tools.android.com/tech-docs/new-build-system/user-guide)to manaje it's dependencies and build system.
-Each of the modules has it's own build.gradle file to manaje specific dependencies necessary for each module.
+Android studio uses the [Gradle](http://www.gradle.org/) with the [Android plugin](http://tools.android.com/tech-docs/new-build-system/user-guide) to manage it's dependencies and build system.
+Each of the modules has it's own build.gradle file to manage specific dependencies necessary for each module.
 
 With the newest version of Android Studio sometimes Gradle makes the mistake of setting the app to target SDK 20 which is current the Android Wear SDK so let's change it a little bit.
 
@@ -155,7 +155,7 @@ We also need to provide some Colors Resources for our App. Inside the folder val
 
 
 ##### Step 2. Create a generic Drawer Activity. 
-As an Android Developer you might find youserlf in the situation of not being able to use fragments or you may want to use different activities with a Drawer Layout. It can also be tedious every time you start a project to code the Nav Drawer boylerplate.  
+As an Android Developer you might find yourself in the situation of not being able to use fragments or you may want to use different activities with a Drawer Layout. It can also be tedious every time you start a project to code the Nav Drawer boylerplate.  
 For those reasons we will extend Activity to create a Default DrawerLayoutActivity for our App.
 
 ``` Hint: Read the code carefully and make sure you understand every single aspect before going to the next step. If you don't understand something raise your hand and someone will explain it to you. ```
@@ -477,7 +477,7 @@ Nav Drawer Item XML:
         android:layout_toRightOf="@id/navDrawerIcon"
         android:layout_toEndOf="@id/navDrawerIcon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/listPreferredItemHeightLarge"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:gravity="center_vertical"
     />
 </RelativeLayout>
