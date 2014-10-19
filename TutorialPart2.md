@@ -216,5 +216,23 @@ I will not bother too much explaining the SQL statement itself. If you want to l
 
 ```  
 
+###### onUpgrade()
+
+For the purpose of this tutorial we will have the simplest method of upgrading a Database.
+When dealing within your own apps use ALTER TABLE instead...
+The reason of not using Alter Table right now is because it can be very specific for each case
+
+```java
+// Inside MyDbHelper.onUpgrade()
+
+// This statements will delete the current tables and call onCreate with the new create table queries.
+// We will never be using this in this tutorial but keep in mind that onUpgrade will be called whenever you want
+// to add a field to the Database.
+db.execSQL("DROP TABLE IF EXISTS " + CATEGORIES_TABLE);
+db.execSQL("DROP TABLE IF EXISTS " + DECKS_TABLE);
+db.execSQL("DROP TABLE IF EXISTS " + FLASHCARDS_TABLE);
+onCreate(db);
+
+```
 
 
