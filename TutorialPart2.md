@@ -103,3 +103,13 @@ public class Category extends CardItem {
 }
 
 ```
+
+###### Deck and Flashcards code..
+
+To keep things a bit short on this file...
+* get the code for Deck [here](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cardStructures/Deck.java)
+* get the code for FlashCard [here](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cardStructures/FlashCard.java)
+
+
+
+

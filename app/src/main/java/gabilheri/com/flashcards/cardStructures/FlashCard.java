@@ -13,9 +13,25 @@ public class FlashCard extends CardItem {
     private Deck deck;
     private String content, answer;
 
+    /**
+     * Basic Constructor
+     */
     public FlashCard() {
     }
 
+    /**
+     *
+     * @param category
+     *      The category to which this flashcard belongs to
+     * @param deck
+     *      The deck to which this flashcard belongs to
+     * @param title
+     *      The title for this FlashCard
+     * @param content
+     *      The content of this flashcard
+     * @param answer
+     *      The answer for this flashcard
+     */
     public FlashCard(Category category, Deck deck, String title, String content, String answer) {
         super(title);
         this.category = category;
@@ -23,6 +39,8 @@ public class FlashCard extends CardItem {
         this.content = content;
         this.answer = answer;
     }
+
+    // Standard Getters and Setters
 
     public Category getCategory() {
         return category;
