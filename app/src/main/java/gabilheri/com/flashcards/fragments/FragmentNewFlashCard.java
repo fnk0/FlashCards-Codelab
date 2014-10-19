@@ -27,7 +27,7 @@ public class FragmentNewFlashCard extends DefaultFragment implements View.OnClic
     private static final String LOG_TAG = FragmentNewFlashCard.class.getSimpleName();
 
     private Button addNewFlashcard;
-    private EditText flashCardName, flashcardContent, flashcardAnswer;
+    private EditText flashcardContent, flashcardAnswer;
     private Bundle b;
 
     @Override
@@ -42,7 +42,6 @@ public class FragmentNewFlashCard extends DefaultFragment implements View.OnClic
         addNewFlashcard = (Button) view.findViewById(R.id.createFlashCard);
         addNewFlashcard.setOnClickListener(this);
 
-        flashCardName = (EditText) view.findViewById(R.id.flashcardTitle);
         flashcardContent = (EditText) view.findViewById(R.id.flashcard_content);
         flashcardAnswer = (EditText) view.findViewById(R.id.flashcard_answer);
     }
@@ -55,8 +54,7 @@ public class FragmentNewFlashCard extends DefaultFragment implements View.OnClic
             MyDbHelper dbHelper = new MyDbHelper(getActivity());
             FlashCard flashCard = new FlashCard();
 
-            if(!flashCardName.getText().toString().isEmpty()) {
-                flashCard.setTitle(flashCardName.getText().toString());
+            if(!flashcardContent.getText().toString().isEmpty() && !flashcardAnswer.getText().toString().isEmpty()) {
                 flashCard.setContent(flashcardContent.getText().toString());
                 flashCard.setAnswer(flashcardAnswer.getText().toString());
                 try {

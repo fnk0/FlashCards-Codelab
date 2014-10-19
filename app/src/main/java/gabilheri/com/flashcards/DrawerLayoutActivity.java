@@ -1,6 +1,7 @@
 package gabilheri.com.flashcards;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -202,13 +203,27 @@ public abstract class DrawerLayoutActivity extends Activity {
      */
     protected abstract BaseAdapter getAdapter();
 
+    /**
+     * Handy method to clear the back stack. We want to do this to avoid back stack bugs.
+     */
+    public void clearBackStack() {
+        FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry first = manager.getBackStackEntryAt(0);
+            manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+    }
 
     @Override
     public void onBackPressed() {
+        // If the back stack is empty we let android handle the back button
         if(getFragmentManager().getBackStackEntryCount() == 0) {
             super.onBackPressed();
         } else {
-           getFragmentManager().popBackStack();
+            // Otherwise we remove it from the back stack and the framework will handle the
+            // fragment change for us :)
+            getFragmentManager().popBackStack();
+            getActionBar().setTitle(mTitle);
         }
     }
 }

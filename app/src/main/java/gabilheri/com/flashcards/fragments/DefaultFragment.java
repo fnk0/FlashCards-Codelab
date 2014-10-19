@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import gabilheri.com.flashcards.MainActivity;
+
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
  *
@@ -24,10 +26,14 @@ import android.view.ViewGroup;
  * The default Fragment is also used so we avoid errors when trying to inflate a fragment that has already been inflated.
  * All our other Fragments will extend DefaultFragment
  */
-public abstract class DefaultFragment extends Fragment {
+public abstract class DefaultFragment extends Fragment implements FragmentManager.OnBackStackChangedListener {
+
+    private static String LOG_TAG = DefaultFragment.class.getCanonicalName();
+    private MainActivity mainActivity;
 
     @Override
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
+
         FragmentManager fm = getFragmentManager();
         if (fm != null) {
             fm.beginTransaction().remove(this).commit();
@@ -82,8 +88,12 @@ public abstract class DefaultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setHasOptionsMenu(true);
+        mainActivity = (MainActivity) getActivity();
+        getFragmentManager().addOnBackStackChangedListener(this);
         // Retain this fragment across configuration changes.
         setRetainInstance(true);
+        shouldDisplayHomeUp();
     }
 
 
@@ -112,9 +122,40 @@ public abstract class DefaultFragment extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            default:
-                return super.onOptionsItemSelected(item);
+        if(shouldDisplayHomeUp()) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    getFragmentManager().popBackStack();
+                    return true;
+            }
         }
+
+        return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackStackChanged() {
+        shouldDisplayHomeUp();
+    }
+
+    /**
+     *
+     */
+    public boolean shouldDisplayHomeUp() {
+        //Enable Up button only  if there are entries in the back stack
+        boolean canback = false;
+        try {
+            canback = getFragmentManager().getBackStackEntryCount() > 0;
+        } catch (Exception ex) {};
+        if (canback) {
+
+            mainActivity.getDrawerToggle().setDrawerIndicatorEnabled(false);
+        } else {
+            mainActivity.getDrawerToggle().setDrawerIndicatorEnabled(true);
+        }
+
+        return canback;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package gabilheri.com.flashcards;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,47 +81,53 @@ public class MainActivity extends DrawerLayoutActivity {
     public void displayView(int position, Bundle fragmentBundle) {
 
         FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
 
         switch (position) {
             case CATEGORIES_FRAG:
                 activeFragment = new FragmentCategories(); // Set the ActiveFragment to our selected item on the list
+                clearBackStack(); // Clear the back stack to avoid back presses bugs
                 break;
             case SETTINGS_FRAG:
                 break;
             case NEW_CATEGORY_FRAG:
                 activeFragment = new FragmentNewCategory();
+                fragmentTransaction.addToBackStack(null); // null = name of the fragment on the stack.
                 break;
             case NEW_DECK_FRAG:
                 activeFragment = new FragmentNewDeck();
+                fragmentTransaction.addToBackStack(null);
                 break;
             case DECKS_FRAG:
                 activeFragment = new FragmentDecks();
+                fragmentTransaction.addToBackStack(null); // null = name of the fragment on the stack.
                 break;
             case FLASHCARDS_FRAG:
                 activeFragment = new FragmentFlashCardsList();
+                fragmentTransaction.addToBackStack(null);
                 break;
             case NEW_FLASHCARD_FRAG:
                 activeFragment = new FragmentNewFlashCard();
+                fragmentTransaction.addToBackStack(null);
                 break;
             case FLASHCARDS_VIEWER:
                 activeFragment = new FragmentFlashCardViewer();
+                fragmentTransaction.addToBackStack(null);
                 break;
             default:
                 break;
         }
 
         if(activeFragment != null) {
-
             if(fragmentBundle != null) {
                 currentBundle = fragmentBundle;
                 activeFragment.setArguments(fragmentBundle);
             }
 
-            fragmentManager.beginTransaction() // Start the transaction of fragment change
-                    .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out, // Animations for the fragment in...
+            fragmentTransaction.setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out, // Animations for the fragment in...
                             R.animator.alpha_in, R.animator.alpha_out) // Animations for the fragment out...
                     .replace(R.id.frame_container, activeFragment, TAG_ACTIVE_FRAGMENT) // We then replace whatever is inside FrameLayout to our activeFragment
-                    .addToBackStack(null) // null = name of the fragment on the stack.
                     .commit(); // Commit the change
             // update selected item and title
             if(position >= 0) {

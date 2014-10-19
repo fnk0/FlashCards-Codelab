@@ -38,7 +38,8 @@ public class ListFlashCardCard extends Card implements Card.OnCardClickListener,
         TextView flashcardTitle = (TextView) view.findViewById(R.id.titleFlashcard);
 
         if(flashCard != null) {
-            flashcardTitle.setText(flashCard.getTitle());
+            String title = flashCard.getContent().length() > 20 ? flashCard.getContent().substring(0, 20) : flashCard.getContent();
+            flashcardTitle.setText(title);
         }
     }
 

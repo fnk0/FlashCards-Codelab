@@ -12,14 +12,14 @@
 
     <EditText
         android:id="@+id/deckTitle"
-        android:hint="@string/category_name"
+        android:hint="@string/deck_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/addNewDeck"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/create_category"
+        android:text="@string/create_deck"
         android:textColor="@android:color/white"
         android:background="@drawable/default_button"
         android:layout_width="match_parent"

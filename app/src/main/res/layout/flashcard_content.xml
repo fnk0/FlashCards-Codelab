@@ -11,13 +11,6 @@
     android:paddingTop="@dimen/activity_horizontal_margin"
     >
 
-    <TextView
-        android:id="@+id/titleFlashcard"
-        android:text="@string/flashcard_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <TextSwitcher
         android:id="@+id/flashcardContentAnswer"
         android:textSize="30sp"

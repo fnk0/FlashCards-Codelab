@@ -21,7 +21,6 @@ public class FragmentFlashcard extends DefaultFragment {
 
     private FlashCardViewerCard card;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_flashcard_content_viewer, container, false);
@@ -29,12 +28,10 @@ public class FragmentFlashcard extends DefaultFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.flashcardViewerFrag);
         CardView cardView = new CardView(getActivity());
         cardView.setCard(card);
         layout.addView(cardView);
-
     }
 
     public FlashCardViewerCard getCard() {

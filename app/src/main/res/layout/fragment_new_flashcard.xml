@@ -11,21 +11,13 @@
     >
 
     <EditText
-        android:id="@+id/flashcardTitle"
-        android:hint="@string/flashcard_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-    />
-
-    <EditText
         android:id="@+id/flashcard_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="5"
         android:hint="@string/flashcard_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        />
+    />
 
     <EditText
         android:id="@+id/flashcard_answer"
@@ -34,18 +26,16 @@
         android:lines="5"
         android:hint="@string/flashcard_answer"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        />
-
+    />
 
     <Button
         android:id="@+id/createFlashCard"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/create_category"
+        android:text="@string/create_flashcard"
         android:textColor="@android:color/white"
         android:background="@drawable/default_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
+        android:layout_height="wrap_content"
+    />
 
 </LinearLayout>

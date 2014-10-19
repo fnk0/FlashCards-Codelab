@@ -152,7 +152,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
     public long createFlashCard(FlashCard flashCard, long deckId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TITLE, flashCard.getTitle());
+        values.put(TITLE, "");
         values.put(FLASHCARD_CONTENT, flashCard.getContent());
         values.put(FLASHCARD_ANSWER, flashCard.getAnswer());
         values.put(BELONGS_TO, deckId);

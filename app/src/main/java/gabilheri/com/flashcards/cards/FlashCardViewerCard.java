@@ -23,10 +23,8 @@ public class FlashCardViewerCard extends Card implements Card.OnCardClickListene
 
     private static String LOG_TAG = FlashCardViewerCard.class.getCanonicalName();
     private FlashCard card;
-    private TextView flashCardTitle;
     private TextSwitcher flashCardContentAnswer;
     private boolean isAnswer = false;
-
 
     public FlashCardViewerCard(Context context) {
         super(context, R.layout.flashcard_content);
@@ -36,12 +34,10 @@ public class FlashCardViewerCard extends Card implements Card.OnCardClickListene
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
         super.setupInnerViewElements(parent, view);
-
-        flashCardTitle = (TextView) view.findViewById(R.id.titleFlashcard);
+        
         flashCardContentAnswer = (TextSwitcher) view.findViewById(R.id.flashcardContentAnswer);
         flashCardContentAnswer.setFactory(mFactory);
         if(card != null) {
-            flashCardTitle.setText(card.getTitle());
             flashCardContentAnswer.setText(card.getContent());
         }
     }
