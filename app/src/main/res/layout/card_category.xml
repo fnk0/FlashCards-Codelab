@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
@@ -10,12 +9,10 @@
     android:paddingRight="@dimen/activity_vertical_margin"
     android:gravity="center_vertical"
     android:layout_height="88dip">
-
     <ImageView
         android:src="@drawable/ic_category_thumb"
         android:layout_width="72dip"
         android:layout_height="72dip" />
-
     <TextView
         android:id="@+id/titleCategory"
         android:text="@string/category_name"
@@ -26,5 +23,4 @@
         android:fontFamily="sans-serif-light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 </LinearLayout>

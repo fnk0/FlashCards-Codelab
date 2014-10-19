@@ -395,3 +395,106 @@ public void deleteFromDB(long id, String table) {
 * Once you have finished the MyDbHelper feel free to copy [my tests](https://github.com/fnk0/FlashCards-Codelab/tree/master/app/src/androidTest/java/gabilheri/com/flashcards) and implement in your app. 
 * Create a new Run configuration for the tests and run it. The tests will create a Database with some dummy data and make sure everything works fine.
 
+#### Creating our custom Cards to be used by the CardsLib:
+
+Our list items will be almost the same, except for the Icon or the actions made by the DbHelper.
+I will put the code here for the Category card and a link for the rest of them.
+###### Category Card:
+
+Layout file: create a xml file named card_category.xml
+
+```xml
+<!-- Inside card category.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:paddingTop="8dip"
+    android:paddingBottom="8dip"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:gravity="center_vertical"
+    android:layout_height="88dip">
+
+    <ImageView
+        android:src="@drawable/ic_category_thumb"
+        android:layout_width="72dip"
+        android:layout_height="72dip" />
+
+    <TextView
+        android:id="@+id/titleCategory"
+        android:text="@string/category_name"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:textSize="28sp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+```
+
+We gona use the built in features of the CardsLib to extend Card and create our own custom cards.
+For more information about creating custom cards refer to the [CardsLib documentantion](https://github.com/gabrielemariotti/cardslib/blob/master/doc/CARD.md#extending-card-class)
+
+```java
+// Inside CategoryCard.java
+public class CategoryCard extends Card implements Card.OnSwipeListener, Card.OnCardClickListener, Card.OnUndoSwipeListListener {
+
+    private Category category;
+    private MyDbHelper helper;
+
+    public CategoryCard(Context context) {
+        super(context, R.layout.card_category);
+        helper = new MyDbHelper(context);
+        this.setSwipeable(true); 
+        this.setOnClickListener(this);
+        this.setOnSwipeListener(this);
+        this.setOnUndoSwipeListListener(this);
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @Override
+    public void setupInnerViewElements(ViewGroup parent, View view) {
+        super.setupInnerViewElements(parent, view);
+
+        TextView categoryTitle = (TextView) view.findViewById(R.id.titleCategory);
+
+        if(category != null) {
+            categoryTitle.setText(category.getTitle());
+        }
+    }
+
+    @Override
+    public void onClick(Card card, View view) {
+        Bundle bundle = new Bundle();
+        bundle.putLong(MyDbHelper._ID, category.getId());
+        bundle.putString(MyDbHelper.TITLE, category.getTitle());
+
+        ((MainActivity) getContext()).displayView(MainActivity.DECKS_FRAG, bundle);
+    }
+
+    @Override
+    public void onSwipe(Card card) {
+        helper.deleteFromDB(category.getId(), MyDbHelper.CATEGORIES_TABLE);
+    }
+
+    @Override
+    public void onUndoSwipe(Card card) {
+        helper.undoCategory(category);
+    }
+}
+```
+
+
+
