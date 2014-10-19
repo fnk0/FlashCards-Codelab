@@ -146,3 +146,75 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
 }
 ```
+
+###### Adding Our database constants to our Helper:
+
+We gonna create a few constants to avoid typos as we gonna have to re-use it to create our tables.
+
+```java
+// Inside MyDbHelper.java
+
+/**
+ * COMMON DATABASE CONSTANTS
+ */
+public static final String _ID = "id"; // we need to use _ID because ID is already used by the system.
+public static final String TITLE = "title";
+public static final String BELONGS_TO = "belongs_to";
+
+/**
+ * CATEGORIES DATABASE CONSTANTS
+ */
+public static final String CATEGORIES_TABLE = "categories";
+
+/**
+ * DECKS DATABASE CONSTANTS
+ */
+public static final String DECKS_TABLE = "decks";
+
+/**
+ * FLASHCARDS DATABASE TABLE
+ */
+public static final String FLASHCARDS_TABLE = "flashcards";
+public static final String FLASHCARD_CONTENT = "content";
+public static final String FLASHCARD_ANSWER = "answer";
+
+```
+
+###### Creating our Database:
+
+Now that we have our constants ready we will update our onCreate method.
+I will not bother too much explaining the SQL statement itself. If you want to learn more about SQLite refer to its [documentantion](http://www.sqlite.org/docs.html)
+
+```java
+// Inside MyDbHelper.onCreate()
+
+  final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORIES_TABLE + " (" 
+          _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+          TITLE + " TEXT NOT NULL " +
+          ");";
+  final String SQL_CREATE_DECKS_TABLE = "CREATE TABLE " + DECKS_TABLE + " (" +
+          _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+          TITLE + " TEXT NOT NULL, " +
+          BELONGS_TO + " INTEGER NOT NULL, " +
+          "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES " + CATEGORIES_TABLE + " (" + _ID + ")" +
+          ");";
+
+  final String SQL_CREATE_FLASHCARDS_TABLE = "CREATE TABLE " + FLASHCARDS_TABLE + " (" +
+          _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+          TITLE + " TEXT NOT NULL, " +
+          FLASHCARD_CONTENT + " TEXT NOT NULL, " +
+          FLASHCARD_ANSWER + " TEXT NOT NULL, " +
+          BELONGS_TO + " INTEGER NOT NULL, " +
+          "FOREIGN KEY (" + BELONGS_TO + ") REFERENCES " + DECKS_TABLE + " (" + _ID + ")" +
+          ");";
+
+  // We now create our tables.
+  // If the tables already exist Android will them ignore this statement.
+  db.execSQL(SQL_CREATE_CATEGORY_TABLE);
+  db.execSQL(SQL_CREATE_DECKS_TABLE);
+  db.execSQL(SQL_CREATE_FLASHCARDS_TABLE);
+
+```  
+
+
+
