@@ -9,16 +9,26 @@ package gabilheri.com.flashcards.cardStructures;
  */
 public abstract class CardItem {
 
-    private String title;
-    private long id;
-    private int color;
+    private String title; // All Items must have a title so we can display on a list
+    private long id; // Each card will also have an ID so we can find it inside our SQLite DB
+    private int color; // Optionally you might want separate cards by color.
 
+    /**
+     * Basic Constructor
+     */
     protected CardItem() {
     }
 
+    /**
+     * @param title
+     *       The title for this Item
+     */
     protected CardItem(String title) {
         this.title = title;
     }
+
+
+    // STANDARD GETTERS AND SETTERS
 
     public String getTitle() {
         return title;
