@@ -111,8 +111,9 @@ To keep things a bit short on this file...
 * get the code for FlashCard [here](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cardStructures/FlashCard.java)
 
 
-#### Part 2. Database! The first level of persistence data is to create a SQLite3 Database that will store our app information.
+#### Part 2. Database!
 
+The first level of persistence data is to create a SQLite3 Database that will store our app information.
 The first step to get a functional Database in Android is making ourselves a DatabaseHelper. In the Android framework a Database helper is a class that interacts with a specific database.
 The easiest way of handling all database interactions is by extending SQLiteOpenHelper.
 
