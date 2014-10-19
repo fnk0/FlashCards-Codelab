@@ -391,4 +391,7 @@ public void deleteFromDB(long id, String table) {
 
 * For the rest of database items please check out the [full impementation of MyDbHelper](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/database/MyDbHelper.java)
 
+* Testing our Database... Most of the time the time in between the DbHelper creation and the implementantion inside the app can take a while... that is why we want to know that the Database works properly. The best way to do it is Testing it. I will not go into details of explaining how the test works as would require an entired separate tutorial. 
+* Once you have finished the MyDbHelper feel free to copy [my tests](https://github.com/fnk0/FlashCards-Codelab/tree/master/app/src/androidTest/java/gabilheri/com/flashcards) and implement in your app. 
+* Create a new Run configuration for the tests and run it. The tests will create a Database with some dummy data and make sure everything works fine.
 
