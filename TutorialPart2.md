@@ -144,6 +144,15 @@ public class MyDbHelper extends SQLiteOpenHelper {
         // This method is called whenever we need to update our Database
         // Examples of updating a DB is adding new tables or new columns to a existing table
     }
+
+    /**
+    * Closes the Database Connection.
+    */
+    public void closeDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null && db.isOpen())
+            db.close();
+    }
 }
 ```
 
@@ -234,5 +243,152 @@ db.execSQL("DROP TABLE IF EXISTS " + FLASHCARDS_TABLE);
 onCreate(db);
 
 ```
+
+###### CRUD:
+
+The 4 verbs for database management are:
+* C - Create
+* R - Read
+* U - Update
+* D - Delete
+
+I will be showing how to implement 3 of those and leave 1 for you to implement.
+
+###### Create:
+```java
+/**
+* This method is used to insert a new Category entry in the database
+*
+* @param category
+*      The category to be inserted
+* @return
+*      The inserted statement for the Database - Used internally by Android
+*/
+public long createCategory(Category category) {
+    SQLiteDatabase db = this.getWritableDatabase(); // We get an WritableDatabase so we can insert data
+    ContentValues values = new ContentValues(); // Create a new content values with Key Value Pairs
+    values.put(TITLE, category.getTitle()); // Insert the TITLE for the Category
+
+    return db.insert(CATEGORIES_TABLE, null, values);
+}
+
+```
+
+###### Read: 2 Formats --> Read 1 Item or read all Items.
+* Read 1 item
+
+```java
+// This method gets the category by ID. Optionally we can query other tables such as title, etc..
+/**
+* Method to get a category based on it's title
+*
+* @param id
+*       The id of the Category
+* @return
+*      A Category object
+*/
+public Category getCategoryByID(long id) {
+    SQLiteDatabase db = this.getReadableDatabase(); // We get a readable database as we only want to access it
+    String selectQuery = "SELECT * FROM " + CATEGORIES_TABLE + " WHERE " + _ID + " = " + id + ";";
+
+    Cursor cursor = db.rawQuery(selectQuery, null);
+    if(cursor != null) {
+        cursor.moveToFirst();
+    } else {
+        Log.i(LOG_TAG, "Cursor is null!!");
+        return null;
+    }
+
+    Category category = new Category();
+    category.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+    category.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+    this.closeDB();
+    cursor.close();
+    return category;
+}
+
+```
+
+* Read all Items
+
+```java
+ /**
+*
+* @return
+*      A list with all the categories
+*/
+public List<Category> getAllCategories() {
+    List<Category> categories = new ArrayList<Category>();
+    String selectQuery = "SELECT * FROM " + CATEGORIES_TABLE;
+
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+
+    if(cursor.moveToNext()) {
+        do {
+            Category category = new Category();
+            category.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+            category.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+            categories.add(category);
+        } while (cursor.moveToNext());
+    }
+    return categories;
+}
+```
+
+* Read all items related to another item. For this example we will read all decks for a specific category
+
+```java
+/**
+*
+* @param id
+*      The category to which we want all Decks
+* @return
+*      A list with all Decks for the specific category
+*/
+public List<Deck> getAllDecksForCategoryId(long id) {
+    List<Deck> decks = new ArrayList<Deck>();
+    String selectQuery = "SELECT * FROM " + DECKS_TABLE + " WHERE " + BELONGS_TO + " = " + id + ";";
+
+    SQLiteDatabase db  = this.getReadableDatabase();
+    Cursor cursor = db.rawQuery(selectQuery, null);
+
+    if(cursor.moveToFirst()) {
+        do {
+            Deck deck = new Deck();
+            deck.setId(cursor.getLong(cursor.getColumnIndex(_ID)));
+            deck.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
+            deck.setCategory(getCategoryByID(id));
+            decks.add(deck);
+        } while (cursor.moveToNext());
+    }
+    cursor.close();
+    this.closeDB();
+    return decks;
+}
+```
+
+###### Update: Your job to implement :)
+
+###### Delete: 
+
+For deletion we will have a more generic method as we don't care about inserting the right element into the Database.
+
+```java
+/**
+* General method to delete an entry from the Database based on it's ID
+* @param id
+*      The ID Of the item to be deleted
+* @param table
+*      The table to which the item should be deleted.
+*/
+public void deleteFromDB(long id, String table) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    db.delete(table, _ID + " = ?", new String[] {String.valueOf(id)});
+    this.closeDB();
+}
+```
+
+* For the rest of database items please check out the [full impementation of MyDbHelper](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/database/MyDbHelper.java)
 
 
