@@ -951,3 +951,4 @@ The next part of the tutorial will be thinking more on our overall structure of 
 Some things that we wish to have to start with are: Categories, Decks, FlashCards.
 
 
+Great Job!! Now let's finish things up with the [Part 2](https://github.com/fnk0/FlashCards-Codelab/blob/master/TutorialPart2.md) of the tutorial!
