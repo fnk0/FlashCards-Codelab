@@ -2,8 +2,6 @@ package gabilheri.com.flashcards;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -29,9 +27,5 @@ public class Utils {
         if (view != null) {
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
-    }
-
-    public static void saveStudyState(Context mContext, Bundle b) {
-        SharedPreferences mPref = mContext.getSharedPreferences("study", Context.MODE_PRIVATE);
     }
 }

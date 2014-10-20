@@ -125,11 +125,10 @@ public abstract class DefaultFragment extends Fragment implements FragmentManage
         if(shouldDisplayHomeUp()) {
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    getFragmentManager().popBackStack();
+                    mainActivity.onBackPressed();
                     return true;
             }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -139,7 +138,7 @@ public abstract class DefaultFragment extends Fragment implements FragmentManage
     }
 
     /**
-     *
+     * Handles if we should display the Drawer hamburger icon or if we should display the back navigation button.
      */
     public boolean shouldDisplayHomeUp() {
         //Enable Up button only  if there are entries in the back stack
@@ -148,14 +147,10 @@ public abstract class DefaultFragment extends Fragment implements FragmentManage
             canback = getFragmentManager().getBackStackEntryCount() > 0;
         } catch (Exception ex) {};
         if (canback) {
-
             mainActivity.getDrawerToggle().setDrawerIndicatorEnabled(false);
         } else {
             mainActivity.getDrawerToggle().setDrawerIndicatorEnabled(true);
         }
-
         return canback;
     }
-
-
 }

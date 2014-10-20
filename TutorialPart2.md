@@ -649,6 +649,199 @@ public class FragmentNewCategory extends DefaultFragment implements View.OnClick
   * [New Flashcard](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/fragments/FragmentNewFlashCard.java)
 
 
+#### Part 6. Updating our Activities...
+
+Now that we have a how bunch of new fragments let's update our displayView method to handle those new fragments.
+
+First let's add our constants. Optionally we could substitute these with a Enum or placing those numbers ina XML file for integers.
+
+```java
+// Inside MainActivity.java
+// We use this to know which of the items has been selected.
+// We name the items so we know which one is which.
+// For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
+public static final int FLASHCARDS_VIEWER = -6;
+public static final int FLASHCARDS_FRAG = -5;
+public static final int DECKS_FRAG = -4;
+public static final int NEW_FLASHCARD_FRAG = -3;
+public static final int NEW_DECK_FRAG = -2;
+public static final int NEW_CATEGORY_FRAG = -1;
+```
+
+The next step is to update our displayView to handle those new cases.
+We will also add a couple new things in here. Such as adding the ability to handle the backstack. 
+
+```java
+//Inside DrawerLayoutActivity.java
+
+/**
+* Handy method to clear the back stack. We want to do this to avoid back stack bugs.
+*/
+public void clearBackStack() {
+    FragmentManager manager = getFragmentManager();
+    if (manager.getBackStackEntryCount() > 0) {
+        FragmentManager.BackStackEntry first = manager.getBackStackEntryAt(0);
+        manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+}
+
+@Override
+public void onBackPressed() {
+    // If the back stack is empty we let android handle the back button
+    if(getFragmentManager().getBackStackEntryCount() == 0) {
+        super.onBackPressed();
+    } else {
+        // Otherwise we remove it from the back stack and the framework will handle the
+        // fragment change for us :)
+        getFragmentManager().popBackStack();
+        getActionBar().setTitle(mTitle);
+    }
+}
+
+```
+
+With the DrawerLayoutActivity updated let's updaste our displayView() method.
+
+```java
+
+FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+switch (position) {
+    case CATEGORIES_FRAG:
+        activeFragment = new FragmentCategories(); // Set the ActiveFragment to our selected item on the list
+        clearBackStack(); // Clear the back stack to avoid back presses bugs
+        break;
+    case SETTINGS_FRAG:
+        break;
+    case NEW_CATEGORY_FRAG:
+        activeFragment = new FragmentNewCategory();
+        fragmentTransaction.addToBackStack(null); // null = name of the fragment on the stack.
+        break;
+    case NEW_DECK_FRAG:
+        activeFragment = new FragmentNewDeck();
+        fragmentTransaction.addToBackStack(null);
+        break;
+    case DECKS_FRAG:
+        activeFragment = new FragmentDecks();
+        fragmentTransaction.addToBackStack(null); 
+        break;
+    case FLASHCARDS_FRAG:
+        activeFragment = new FragmentFlashCardsList();
+        fragmentTransaction.addToBackStack(null);
+        break;
+    case NEW_FLASHCARD_FRAG:
+        activeFragment = new FragmentNewFlashCard();
+        fragmentTransaction.addToBackStack(null);
+        break;
+    default:
+        break;
+}
+
+if(activeFragment != null) {
+    if(fragmentBundle != null) {
+        currentBundle = fragmentBundle;
+        activeFragment.setArguments(fragmentBundle);
+    }
+    fragmentTransaction.setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out, // Animations for the fragment in...
+                  R.animator.alpha_in, R.animator.alpha_out) // Animations for the fragment out...
+            .replace(R.id.frame_container, activeFragment, TAG_ACTIVE_FRAGMENT) // We then replace whatever is inside FrameLayout to our activeFragment
+            .commit(); // Commit the change
+
+    // update selected item and title
+    if(position >= 0) {
+        getDrawerList().setItemChecked(position, true); // We now set the item on the drawer that has been cliced as active
+        getDrawerList().setSelection(position); // Same concept as above...
+        setTitle(navMenuTitles[position]); // We not change the title of the Action Bar to match our fragment.
+    } else {
+        if(fragmentBundle == null) {
+            setTitle(fragmentTitles.get(position)); // We not change the title of the Action Bar to match our fragment.
+        } else {
+            setTitle(fragmentBundle.getString(MyDbHelper.TITLE));
+        }
+    }
+} else {
+    Log.i(getLogTag(), "Error creating fragment"); // if the fragment does not create we Log an error.
+}
+
+```
+
+To handle our backstack changed we also have to update DefaultFragment. 
+
+* First we implement FragmentManager.OnBackStackChangedListener to lsiten to changes in the backstack.
+
+```java
+
+public abstract class DefaultFragment extends Fragment implements FragmentManager.OnBackStackChangedListener {}
+
+```
+
+* Next  we will add a reference to MainActivity:
+
+```java
+
+private MainActivity mainActivity; 
+
+// Now we change onCreate to look like this: 
+
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    this.setHasOptionsMenu(true);
+    mainActivity = (MainActivity) getActivity();
+    getFragmentManager().addOnBackStackChangedListener(this);
+    // Retain this fragment across configuration changes.
+    setRetainInstance(true);
+    shouldDisplayHomeUp();
+}
+
+// Somewhere else we add these 2 methods... 
+@Override
+public void onBackStackChanged() {
+    shouldDisplayHomeUp();
+}
+
+/**
+* Handles if we should display the Drawer hamburger icon or if we should display the back navigation button. 
+*/
+public boolean shouldDisplayHomeUp() {
+    //Enable Up button only  if there are entries in the back stack
+    boolean canback = false;
+    try {
+        canback = getFragmentManager().getBackStackEntryCount() > 0;
+    } catch (Exception ex) {};
+    if (canback) {
+        mainActivity.getDrawerToggle().setDrawerIndicatorEnabled(false);
+    } else {
+        mainActivity.getDrawerToggle().setDrawerIndicatorEnabled(true);
+    }
+    return canback;
+}
+
+```
+
+* And finally we should update our onOptionsItemSelected to handle the back up navigation.
+
+```java
+// Still inside DefaultFragment
+
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    if(shouldDisplayHomeUp()) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mainActivity.onBackPressed();
+                return true;
+        }
+    }
+    return super.onOptionsItemSelected(item);
+}
+
+```
+
+
+
+
 
 
 

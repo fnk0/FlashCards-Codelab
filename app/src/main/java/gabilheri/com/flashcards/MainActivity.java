@@ -27,7 +27,6 @@ public class MainActivity extends DrawerLayoutActivity {
 
     private static final String TAG_ACTIVE_FRAGMENT = "fragment_active";
 
-
     // We use this to know which of the items has been selected.
     // We name the items so we know which one is which.
     // For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
@@ -82,7 +81,6 @@ public class MainActivity extends DrawerLayoutActivity {
 
         FragmentManager fragmentManager = getFragmentManager(); // Get the fragmentManager for this activity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 
         switch (position) {
             case CATEGORIES_FRAG:
@@ -140,9 +138,7 @@ public class MainActivity extends DrawerLayoutActivity {
                 } else {
                     setTitle(fragmentBundle.getString(MyDbHelper.TITLE));
                 }
-
             }
-
         } else {
             Log.i(getLogTag(), "Error creating fragment"); // if the fragment does not create we Log an error.
         }
