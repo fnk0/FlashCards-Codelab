@@ -660,7 +660,7 @@ First let's add our constants. Optionally we could substitute these with a Enum 
 // We use this to know which of the items has been selected.
 // We name the items so we know which one is which.
 // For the fragments that will be OUTSIDE of the drawer layout we use negative numbers so we avoid a conflict.
-public static final int FLASHCARDS_VIEWER = -6;
+
 public static final int FLASHCARDS_FRAG = -5;
 public static final int DECKS_FRAG = -4;
 public static final int NEW_FLASHCARD_FRAG = -3;
@@ -839,7 +839,197 @@ public boolean onOptionsItemSelected(MenuItem item) {
 
 ```
 
+#### Part 7. Implementing the Study Fragment.
 
+The study fragment is where we will be able to see our FlashCards.
+
+In this fragment we will be using a ViewPager. 
+The basic structure of the Study fragment is that we will Have a list of FlashCardViewer fragments.
+Each FlashCardViewer fragment will have a basic structure of a TextSwatcher to animate the change in between content and answer.
+
+* First we will make the Layout for the Fragment FlashCard Viewer:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="gabilheri.com.flashcards.fragments.FragmentFlashCardViewer" />
+
+</LinearLayout>
+```
+
+* Next we will make the Layout that will display the content for each fragment.
+
+```xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="gabilheri.com.flashcards.fragments.FragmentFlashCardViewer" />
+
+</LinearLayout>
+
+```
+
+* Next we will have to create the code to handle the Fragment FlashCard Viewer. 
+
+```java
+
+public class FragmentFlashCardViewer extends DefaultFragment implements View.OnClickListener {
+
+    private static final String LOG_TAG = FragmentFlashCardViewer.class.getSimpleName();
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private List<FlashCardViewerCard> mCardsList;
+    private MyDbHelper dbHelper;
+    private Bundle activeBundle;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        return inflater.inflate(R.layout.fragment_flashcard_viewer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        activeBundle = getArguments();
+
+        if(activeBundle == null) {
+            activeBundle = savedInstanceState;
+        }
+
+        dbHelper = new MyDbHelper(getActivity());
+        mCardsList = new ArrayList<FlashCardViewerCard>();
+        List<FlashCard> flashcards = dbHelper.getAllFlashCardsForDeckId(activeBundle.getLong(MyDbHelper._ID));
+
+        for(int i = 0; i < flashcards.size(); i++) {
+            FlashCardViewerCard card = new FlashCardViewerCard(getActivity());
+            card.setId(String.valueOf(flashcards.get(i).getId()));
+            card.setCard(flashcards.get(i));
+            mCardsList.add(card);
+        }
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mViewPager = (ViewPager) view.findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onClick(View v) {
+      // We are not using this right now but is always handy to override the click listener in case we want to add something else.
+    }
+
+    /**
+     * /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+        private Fragment mFragment;
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            mFragment = new FragmentFlashcard();
+            ((FragmentFlashcard) mFragment).setCard(mCardsList.get(position));
+
+            return mFragment;
+        }
+
+        @Override
+        public int getCount() {
+            return mCardsList.size();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return super.getItemPosition(object);
+        }
+    }
+}
+
+```
+
+* Now we add it to our list in mainAxtivity and to displayView()
+
+```java
+
+public static final int FLASHCARDS_VIEWER = -6;
+
+// them inside the switch in displayView()
+case FLASHCARDS_VIEWER:
+  activeFragment = new FragmentFlashCardViewer();
+  fragmentTransaction.addToBackStack(null);
+  break;
+
+```
 
 
 
