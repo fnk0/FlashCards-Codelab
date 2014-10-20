@@ -395,7 +395,7 @@ public void deleteFromDB(long id, String table) {
 * Once you have finished the MyDbHelper feel free to copy [my tests](https://github.com/fnk0/FlashCards-Codelab/tree/master/app/src/androidTest/java/gabilheri/com/flashcards) and implement in your app. 
 * Create a new Run configuration for the tests and run it. The tests will create a Database with some dummy data and make sure everything works fine.
 
-#### Creating our custom Cards to be used by the CardsLib:
+#### Part 3. Creating our custom Cards to be used by the CardsLib:
 
 Our list items will be almost the same, except for the Icon or the actions made by the DbHelper.
 I will put the code here for the Category card and a link for the rest of them.
@@ -439,6 +439,12 @@ Layout file: create a xml file named card_category.xml
 
 We gona use the built in features of the CardsLib to extend Card and create our own custom cards.
 For more information about creating custom cards refer to the [CardsLib documentantion](https://github.com/gabrielemariotti/cardslib/blob/master/doc/CARD.md#extending-card-class)
+
+Side Note: Bundle:
+Bundle is an Android object that maps a Name to a Value. It is used by Android to pass prcelable objects in between fragments and activities. 
+For more information refer to the [Bundle documentantion](http://developer.android.com/reference/android/os/Bundle.html)
+
+I would also recommend reading about the [Parcelable interface](http://developer.android.com/reference/android/os/Parcelable.html) in Android. 
 
 ```java
 // Inside CategoryCard.java
@@ -495,6 +501,102 @@ public class CategoryCard extends Card implements Card.OnSwipeListener, Card.OnC
     }
 }
 ```
+
+###### XML Resources for the custom cards:
+
+* [Deck](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/res/layout/card_deck.xml)
+* [FlashCard](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/res/layout/card_flashcard.xml)
+* [FlashCard Content](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/res/layout/flashcard_content.xml)
+
+##### Java code for the Custom cards:
+
+* [Deck](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cards/DeckCard.java)
+* [ListFlashCard](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cards/ListFlashCardCard.java)
+* [FlashCardViewer](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cards/ListFlashCardCard.java)
+
+#### Part 4. Displaying elements from the DB. 
+
+###### Categories: 
+It is time now to have our categories fragment display elements Dinamically! We gonna delete the part thar displays dummy data and make it query a list to our DB.
+
+Luckily for us we just need to update a few lines of code to handle that :) 
+
+```java
+// Inside FragmentCategories.onViewCreated()
+// We gonan update our current loop with this new loop.
+
+MyDbHelper dbHelper = new MyDbHelper(getActivity()); // Get a reference to our DbHelper object
+List<Category> categories = dbHelper.getAllCategories(); // Query all the existend categories
+
+for (int i = 0; i < categories.size(); i++) { // Loop through the categories 1 by 1 and make a new category card.
+    CategoryCard card = new CategoryCard(getActivity());
+    card.setId(String.valueOf(categories.get(i).getId()));
+    card.setCategory(categories.get(i));
+    mCardsList.add(card);
+}
+
+```
+
+###### Decks: 
+
+Decks is very similar to Categories. So I will leave a link here to the code.
+* [FragmentDecks](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/fragments/FragmentDecks.java)
+
+###### FlashCards List:
+
+Same for the flashcards list.. 
+* [FragmentFlashCardsList](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/fragments/FragmentFlashCardsList.java)
+
+
+#### Part 5. Creating Elements...
+
+So far we can view our lists.. but besides the dummy data injected by the tests we can't see anything there... Well.. let's change that!!
+
+The form to create a new element is quite simple.. We will have an XML element for the UI part and a Fragment to display it. Optionally we could use a DialogFragment for that also.
+
+* Code for the fragment_new_category.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    >
+
+    <EditText
+        android:id="@+id/categoryTitle"
+        android:hint="@string/category_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/addNewCategory"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/create_category"
+        android:textColor="@android:color/white"
+        android:background="@drawable/default_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+```
+
+* Very similar for New Deck and New Flashcard:
+  * [fragment_new_deck.xml](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/res/layout/fragment_new_deck.xml)
+  * [fragment_new_flashcard](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/res/layout/fragment_new_flashcard.xml)
+
+
+
+
+
+
 
 
 
