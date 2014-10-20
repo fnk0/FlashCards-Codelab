@@ -66,7 +66,7 @@ public class FragmentNewFlashCard extends DefaultFragment implements View.OnClic
                     Log.i(LOG_TAG, "Could not create Flashcard");
                 }
             } else {
-                Toast.makeText(getActivity(), "Flashcard MUST have a title.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Flashcard MUST have content and answer.", Toast.LENGTH_LONG).show();
             }
         }
     }
