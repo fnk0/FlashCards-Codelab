@@ -1031,6 +1031,8 @@ case FLASHCARDS_VIEWER:
 
 ```
 
+Now test it out... and see if works!! I will be changing this ending once it has been proofread and tested. :)
+
 
 
 
