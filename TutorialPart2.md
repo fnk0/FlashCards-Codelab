@@ -128,7 +128,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "flashcards.db"; // the .db is optional.
 
-    public SomeDbHelper(Context context) {
+    public MyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -397,6 +397,14 @@ public void deleteFromDB(long id, String table) {
 
 #### Part 3. Creating our custom Cards to be used by the CardsLib:
 
+###### Adding Assets icon: 
+Before continuing I strongly recommend that you add the Icon assets that will be used by the following XML elements. In the assets folder that you downloaded use the *category_icon*, *deck_icon*, and *flashcard_icon* to create:
+* ic_category_tumb
+* ic_decks
+* ic_flashcard
+
+Note: to create the icons right click the res folder and select *New > Image Asset*. If you are having troubles with this part there is a detailed guide on the [part 1](https://github.com/fnk0/FlashCards-Codelab/blob/master/TutorialPart1.md) of the tutorial on how to do it. 
+
 Our list items will be almost the same, except for the Icon or the actions made by the DbHelper.
 I will put the code here for the Category card and a link for the rest of them.
 ###### Category Card:
@@ -512,7 +520,7 @@ public class CategoryCard extends Card implements Card.OnSwipeListener, Card.OnC
 
 * [Deck](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cards/DeckCard.java)
 * [ListFlashCard](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cards/ListFlashCardCard.java)
-* [FlashCardViewer](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/cards/ListFlashCardCard.java)
+* [FlashCardViewer](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/fragments/FragmentFlashCardViewer.java)
 
 #### Part 4. Displaying elements from the DB. 
 
@@ -700,7 +708,7 @@ public void onBackPressed() {
 
 ```
 
-With the DrawerLayoutActivity updated let's updaste our displayView() method.
+With the DrawerLayoutActivity updated let's update our displayView() method.
 
 ```java
 
