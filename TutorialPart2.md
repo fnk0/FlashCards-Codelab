@@ -2,11 +2,11 @@ FlashCards Tutorial Part 2
 ==========
 
 * If you haven't finished [Part 1](https://github.com/fnk0/FlashCards-Codelab/blob/master/TutorialPart1.md) yet I strongly recommend so.
-* Optionally if you already understand the basics of Android you can start this tutorial from part by downloading Part 1 code from here.
+* Optionally if you already understand the basics of Android you can start this tutorial from part 1 by downloading Part 1 code from here.
 
 #### Part 1. Creating or models.
 
-* Let's start up by creating or models. This will be a basic Flashcards app with the following models.
+* Let's start up by creating our models. This will be a basic Flashcards app with the following models.
   * Categories --> A flashcard will have decks
   * Decks --> A deck will belong to a category and have flashcards
   * Flashcards --> Wil belong to a deck and have no direct children.
@@ -158,7 +158,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
 ###### Adding Our database constants to our Helper:
 
-We gonna create a few constants to avoid typos as we gonna have to re-use it to create our tables.
+We are going to create a few constants to avoid typos as we gonna have to re-use it to create our tables.
 
 ```java
 // Inside MyDbHelper.java
@@ -391,7 +391,7 @@ public void deleteFromDB(long id, String table) {
 
 * For the rest of database items please check out the [full impementation of MyDbHelper](https://github.com/fnk0/FlashCards-Codelab/blob/master/app/src/main/java/gabilheri/com/flashcards/database/MyDbHelper.java)
 
-* Testing our Database... Most of the time the time in between the DbHelper creation and the implementantion inside the app can take a while... that is why we want to know that the Database works properly. The best way to do it is Testing it. I will not go into details of explaining how the test works as would require an entired separate tutorial. 
+* Testing our Database... Most of the time the time, in between the DbHelper creation and the implementantion inside the app can take a while... that is why we want to know that the Database works properly. The best way to do it is Testing it. I will not go into detail of explaining how the test works as it would require an entired separate tutorial. 
 * Once you have finished the MyDbHelper feel free to copy [my tests](https://github.com/fnk0/FlashCards-Codelab/tree/master/app/src/androidTest/java/gabilheri/com/flashcards) and implement in your app. 
 * Create a new Run configuration for the tests and run it. The tests will create a Database with some dummy data and make sure everything works fine.
 
@@ -445,7 +445,7 @@ Layout file: create a xml file named card_category.xml
 </LinearLayout>
 ```
 
-We gona use the built in features of the CardsLib to extend Card and create our own custom cards.
+We are going to use the built in features of the CardsLib to extend Card and create our own custom cards.
 For more information about creating custom cards refer to the [CardsLib documentantion](https://github.com/gabrielemariotti/cardslib/blob/master/doc/CARD.md#extending-card-class)
 
 Side Note: Bundle:
@@ -525,7 +525,7 @@ public class CategoryCard extends Card implements Card.OnSwipeListener, Card.OnC
 #### Part 4. Displaying elements from the DB. 
 
 ###### Categories: 
-It is time now to have our categories fragment display elements Dinamically! We gonna delete the part thar displays dummy data and make it query a list to our DB.
+It is time now to have our categories fragment display elements Dynamically! We gonna delete the part thar displays dummy data and make it query a list to our DB.
 
 Luckily for us we just need to update a few lines of code to handle that :) 
 
