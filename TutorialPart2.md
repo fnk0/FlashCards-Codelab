@@ -197,7 +197,7 @@ I will not bother too much explaining the SQL statement itself. If you want to l
 ```java
 // Inside MyDbHelper.onCreate()
 
-  final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORIES_TABLE + " (" 
+  final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORIES_TABLE + " (" +
           _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
           TITLE + " TEXT NOT NULL " +
           ");";
@@ -1039,7 +1039,9 @@ case FLASHCARDS_VIEWER:
 
 ```
 
-Now test it out... and see if works!! I will be changing this ending once it has been proofread and tested. :)
+Thanks for doing this codelab and I hope you have learned a lot while doing it. 
+
+For suggestions and improvements please contact me at [email us](marcusandreog@gmail.com)
 
 
 
