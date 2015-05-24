@@ -21,8 +21,9 @@ For this project we will use Ice Cream Sandwich (API 15) As our Default SDK.
 We only select the Phone and Tablet module as for now those are the only one we use. In a later version of this series of tutorial we will be covering other modules such as the App Engine module for online storage and the Android Wear for integration with Android Wear Watches.
 With the SDK 15 we will cover about 86% of all Android Devices.
 
-``` Tip: To see the coverage of an particular SDK version click on "help me choose" ```
-
+``` 
+Tip: To see the coverage of an particular SDK version click on "help me choose" 
+```
 
 ![Blanck activity selection](https://raw.githubusercontent.com/fnk0/FlashCards/master/Screenshots/Screenshot%202014-08-31%2023.53.10.png)
 Select blank activty as we want to start this project clean without too much boylerplate.
