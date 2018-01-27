@@ -1,6 +1,8 @@
 FlashCards Tutorial Part 1
 ==========
 
+Hello world
+
 This tutorial will be assume that you have installed
 
 1. Java SDK >= 1.7
